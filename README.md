@@ -1,84 +1,10 @@
-# Linea Bridge UI
-
-## Deployment
+# Status Network Bridge UI
 
 ### Config
 
 The config file `.env.production` is used for public configuration variables.
 
 Private configuration variables are store on GitHub Secrets.
-
-### Get a Frontend Tag
-
-- Retrieve an existing tag.
-  - Get a Tag from [GitHub Actions](https://github.com/Consensys/zkevm-monorepo/actions) on `Bridge UI Build and Publish` job, `Set Docker Tag` action.
-- Or create a new tag.
-  - Create a PR and merge the last version to develop branch, and get a Tag from [GitHub Actions](https://github.com/Consensys/zkevm-monorepo/actions) on `Bridge UI Build and Publish` job, `Set Docker Tag` action.
-
-Example:
-
-In `Set Docker Tag`
-
-```
-Run echo "DOCKER_TAG=${GITHUB_SHA:0:7}-$(date +%s)-bridge-ui-${{ steps.package-version.outputs.current-version }}" | tee $GITHUB_ENV
-DOCKER_TAG=f3afe33-1705598198-bridge-ui-0.5.3
-```
-
-The Tag is `f3afe33-1705598198-bridge-ui-0.5.3`
-
-### Deployment on Dev
-
-To publish updates to [https://bridge.dev.linea.build/](https://bridge.dev.linea.build/):
-
-#### Update a Frontend Tag on Linea cluster
-
-1. Get a Frontend Tag
-2. Go to [zk-apps-dev](https://github.com/Consensys/zk-apps-dev) project, create a branch from `main` branch.
-3. Modify [values.yaml](https://github.com/ConsenSys/zk-apps-dev/blob/main/argocd/bridge-ui/values.yaml) by replacing it with the specified tag.
-
-```
----
-image:
-  bridge_ui:
-    repository: consensys/bridge-ui
-    tag: f3afe33-1705598198-bridge-ui-0.5.3
-    [...]
-```
-
-- Push the branch and create a merge request
-
-The update should appear on [https://bridge.dev.linea.build/](https://bridge.dev.linea.build/).
-
-#### Check ArgoCD deployment
-
-To check the deployment, go to: [argocd.dev.zkevm.consensys.net](https://argocd.dev.zkevm.consensys.net/applications/argocd/bridge-ui?resource=)
-
-Access are in [1password](https://consensys.1password.com/vaults/blu7ljyqd5zgkj5vbjlmooayya/allitems/ccljvnh2hgs6jh5zc4s5apww4i)
-
-### Deployment on Production
-
-To publish updates to [https://bridge.linea.build/](https://bridge.linea.build/):
-
-#### Update a Frontend Tag on Linea cluster
-
-1. Get a Frontend Tag
-2. Go to [zk-apps-prod](https://github.com/Consensys/zk-apps-prod) project, create a branch from `main` branch.
-3. Modify [values.yaml](https://github.com/Consensys/zk-apps-prod/blob/main/argocd/bridge-ui/values.yaml) by replacing it with the specified tag.
-
-Example:
-
-```
----
-image:
-  bridge_ui:
-    repository: consensys/bridge-ui
-    tag: f3afe33-1705598198-bridge-ui-0.5.3
-    [...]
-```
-
-3. Push the branch and create a merge request
-
-The update should appear on [https://bridge.linea.build/](https://bridge.linea.build/).
 
 ## Development
 
@@ -105,37 +31,6 @@ npm run dev
 ```
 
 Frontend should be available at: http://localhost:3000
-
-### Build and test Docker image
-
-Commands to test locally the Docker image used in production.
-
-Build the image:
-
-```shell
-# build local image
-docker build --build-arg ENV_FILE=.env.production -t linea/bridge-ui .
-```
-
-Replace with `ENV_FILE=.env.production` to test dev env.
-
-Run the image:
-
-```shell
-# run local image
-docker run -p 3000:3000 linea/bridge-ui
-```
-
-Frontend should be available at: http://localhost:3000
-
-### End to end tests
-
-E2E tests are run in the CI but can also be run locally.  
-Make sure `E2E_TEST_PRIVATE_KEY` .env (The private key used needs to have some sepolia ETH, USDC and WETH to run the tests)
-
-1. Add `NEXT_PUBLIC_WALLET_CONNECT_ID` and `NEXT_PUBLIC_INFURA_ID` to your command line env
-2. Build the Bridge UI in local in a terminal: `npm run build`
-3. Run the command: `npm test` in another terminal
 
 ## Config
 
@@ -169,7 +64,3 @@ The config variables are:
 | NEXT_PUBLIC_INFURA_ID                         | Infura API Key                                 |                                                                                                           |
 | E2E_TEST_PRIVATE_KEY                          | Private key to execute e2e on Sepolia          |                                                                                                           |
 | NEXT_PUBLIC_STORAGE_MIN_VERSION               | Local storage version for reseting the storage | 1                                                                                                         |
-
-## About
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
