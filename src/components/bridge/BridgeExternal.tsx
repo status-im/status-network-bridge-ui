@@ -4,7 +4,7 @@ import { MdArrowOutward } from "react-icons/md";
 export function BridgeExternal() {
   return (
     <Link
-      href="https://linea.build/apps?types=bridge"
+      href="https://status.network"
       passHref
       target="_blank"
       rel="noopener noreferrer"
