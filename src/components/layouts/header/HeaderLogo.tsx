@@ -21,7 +21,7 @@ function formatPath(pathname: string): string {
 export const HeaderLogo: React.FC<HeaderLogoProps> = ({ pathname }) => (
   <div className="flex-1">
     <Image
-      src={"/images/logo/linea.svg"}
+      src={"/images/logo/status-network.svg"}
       alt="Linea logo"
       width={0}
       height={0}

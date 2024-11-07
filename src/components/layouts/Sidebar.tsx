@@ -11,7 +11,7 @@ export default function Sidebar() {
           <div className="flex h-24 items-center p-4">
             <Link href="/">
               <Image
-                src={"/images/logo/linea.svg"}
+                src={"/images/logo/status-network.svg"}
                 alt="Linea logo"
                 width={0}
                 height={0}

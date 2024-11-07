@@ -43,9 +43,9 @@ export const getChainNetworkType = (chain: Chain) => {
 export const getChainLogoPath = (chainId: number) => {
   switch (chainId) {
     case linea.id:
-      return "/images/logo/linea-mainnet.svg";
+      return "/images/logo/sn-mainnet.svg";
     case lineaSepolia.id:
-      return "/images/logo/linea-sepolia.svg";
+      return "/images/logo/sn-sepolia.svg";
     case mainnet.id:
     case sepolia.id:
       return "/images/logo/ethereum-rounded.svg";

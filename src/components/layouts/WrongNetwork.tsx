@@ -11,8 +11,8 @@ const supportedChains = [
     chainId: mainnet.id,
   },
   {
-    title: "Linea Mainnet",
-    iconPath: "/images/logo/linea-mainnet.svg",
+    title: "Status Mainnet",
+    iconPath: "/images/logo/sn-mainnet.svg",
     chainId: linea.id,
   },
   {
@@ -21,8 +21,8 @@ const supportedChains = [
     chainId: sepolia.id,
   },
   {
-    title: "Linea Sepolia",
-    iconPath: "/images/logo/linea-sepolia.svg",
+    title: "Status Sepolia",
+    iconPath: "/images/logo/sn-sepolia.svg",
     chainId: lineaSepolia.id,
   },
 ];
