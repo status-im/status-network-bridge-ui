@@ -11,9 +11,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 const metadata: Metadata = {
-  title: "Linea Bridge",
-  description: `Linea Bridge is a bridge solution, providing secure and efficient cross-chain transactions between Layer 1 and Linea networks.
-  Discover the future of blockchain interaction with Linea Bridge.`,
+  title: "Status Network Bridge",
+  description: `Status Network Bridge is a bridge solution, providing secure and efficient cross-chain transactions between Layer 1 and Status Network.
+  Discover the future of blockchain interaction with Status Network Bridge.`,
   icons: {
     icon: "./favicon.png",
   },

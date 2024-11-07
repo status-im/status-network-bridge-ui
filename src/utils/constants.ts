@@ -17,22 +17,16 @@ export const MENU_ITEMS = [
     Icon: TransactionsIcon,
   },
   {
-    title: "FAQ",
-    href: "/faq",
-    external: false,
-    Icon: FaqIcon,
-  },
-  {
     title: "Docs",
-    href: "https://docs.linea.build/developers/guides/bridge/how-to-bridge-eth",
+    href: "https://docs.status.network/general-info/bridge/bridge-to-status",
     external: true,
     Icon: DocsIcon,
   },
 ];
 
 export const NETWORK_ID_TO_NAME: Record<number, string> = {
-  59144: "Linea",
-  59141: "Linea Sepolia",
+  59144: "Status",
+  59141: "Status Sepolia",
   1: "Ethereum",
   11155111: "Sepolia",
 };

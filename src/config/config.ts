@@ -101,9 +101,9 @@ export const config: Config = {
           : ({} as Address),
       },
       L2: {
-        name: "Linea",
-        chainId: 59144,
-        iconPath: "/images/logo/linea-mainnet.svg",
+        name: "Status",
+        chainId: 59144, // @TODO Update chain ID
+        iconPath: "/images/logo/sn-mainnet.svg",
         messageServiceAddress: process.env.NEXT_PUBLIC_MAINNET_LINEA_MESSAGE_SERVICE
           ? (process.env.NEXT_PUBLIC_MAINNET_LINEA_MESSAGE_SERVICE as Address)
           : ({} as Address),
@@ -141,9 +141,9 @@ export const config: Config = {
           : ({} as Address),
       },
       L2: {
-        name: "Linea Sepolia",
-        iconPath: "/images/logo/linea-sepolia.svg",
-        chainId: 59141,
+        name: "Status Sepolia",
+        iconPath: "/images/logo/sn-sepolia.svg",
+        chainId: 59141, // @TODO Update chain id
         messageServiceAddress: process.env.NEXT_PUBLIC_SEPOLIA_LINEA_MESSAGE_SERVICE
           ? (process.env.NEXT_PUBLIC_SEPOLIA_LINEA_MESSAGE_SERVICE as Address)
           : ({} as Address),
