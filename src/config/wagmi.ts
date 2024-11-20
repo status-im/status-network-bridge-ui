@@ -38,10 +38,10 @@ export const wagmiConfig = defaultWagmiConfig({
     }),
   ],
   transports: {
-    [mainnet.id]: http(`https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`, { batch: true }),
-    [sepolia.id]: http(`https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`, { batch: true }),
-    [linea.id]: http(`https://linea-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`, { batch: true }),
-    [lineaSepolia.id]: http(`https://linea-sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`, { batch: true }),
+    [mainnet.id]: http(process.env.NEXT_L1_MAINNET_RPC_URL, { batch: true }),
+    [sepolia.id]: http(process.env.NEXT_L1_TESTNET_RPC_URL, { batch: true }),
+    [linea.id]: http(process.env.NEXT_L2_MAINNET_RPC_URL, { batch: true }),
+    [lineaSepolia.id]: http(process.env.NEXT_L2_TESTNET_RPC_URL, { batch: true }),
   },
   storage: createStorage({
     storage: cookieStorage,
