@@ -37,7 +37,7 @@ Frontend should be available at: http://localhost:3000
 The config variables are:
 
 | Var                                           | Description                                    | Values                                                                                                    |
-| --------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| --------------------------------------------- |------------------------------------------------| --------------------------------------------------------------------------------------------------------- |
 | NEXT_PUBLIC_MAINNET_L1_TOKEN_BRIDGE           | Linea Token Bridge on Ethereum mainnet         | 0x051F1D88f0aF5763fB888eC4378b4D8B29ea3319                                                                |
 | NEXT_PUBLIC_MAINNET_LINEA_TOKEN_BRIDGE        | Linea Token Bridge on Linea mainnet            | 0x353012dc4a9A6cF55c941bADC267f82004A8ceB9                                                                |
 | NEXT_PUBLIC_MAINNET_L1_MESSAGE_SERVICE        | Linea Message Service on Ethereum mainnet      | 0xd19d4B5d358258f05D7B411E21A1460D11B0876F                                                                |
@@ -61,6 +61,9 @@ The config variables are:
 | NEXT_PUBLIC_SEPOLIA_TOKEN_LIST                | Linea Token list on Sepolia                    | https://raw.githubusercontent.com/Consensys/linea-token-list/main/json/linea-sepolia-token-shortlist.json |
 |                                               |                                                |                                                                                                           |
 | NEXT_PUBLIC_WALLET_CONNECT_ID                 | Wallet Connect Api Key                         |                                                                                                           |
-| NEXT_PUBLIC_INFURA_ID                         | Infura API Key                                 |                                                                                                           |
+| NEXT_L1_TESTNET_RPC_URL                       | L1 Testnet RPC URL                             |                                                                                                           |
+| NEXT_L1_MAINNET_RPC_URL                       | L1 Mainnet RPC URL                             |                                                                                                           |
+| NEXT_L2_TESTNET_RPC_URL                       | L2 Testnet RPC URL                             |                                                                                                           |
+| NEXT_L2_MAINNET_RPC_URL                       | L2 Mainnet RPC URL                             |                                                                                                           |
 | E2E_TEST_PRIVATE_KEY                          | Private key to execute e2e on Sepolia          |                                                                                                           |
 | NEXT_PUBLIC_STORAGE_MIN_VERSION               | Local storage version for reseting the storage | 1                                                                                                         |
