@@ -13,19 +13,22 @@ const useLineaSDK = () => {
   const networkType = useChainStore((state) => state.networkType);
 
   const { lineaSDK, lineaSDKContracts } = useMemo(() => {
-    const infuraKey = process.env.NEXT_PUBLIC_INFURA_ID;
-    if (!infuraKey) return { lineaSDK: null, lineaSDKContracts: null };
+    const rpcUrlAvailable =
+      (process.env.NEXT_L1_MAINNET_RPC_URL && process.env.NEXT_L2_MAINNET_RPC_URL) &&
+      (process.env.NEXT_L1_TESTNET_RPC_URL && process.env.NEXT_L2_TESTNET_RPC_URL)
+
+    if (rpcUrlAvailable) return { lineaSDK: null, lineaSDKContracts: null };
 
     let l1RpcUrl;
     let l2RpcUrl;
     switch (networkType) {
       case NetworkType.MAINNET:
-        l1RpcUrl = `https://mainnet.infura.io/v3/${infuraKey}`;
-        l2RpcUrl = `https://linea-mainnet.infura.io/v3/${infuraKey}`;
+        l1RpcUrl = process.env.NEXT_L1_MAINNET_RPC_URL;
+        l2RpcUrl = process.env.NEXT_L2_MAINNET_RPC_URL;
         break;
       case NetworkType.SEPOLIA:
-        l1RpcUrl = `https://sepolia.infura.io/v3/${infuraKey}`;
-        l2RpcUrl = `https://linea-sepolia.infura.io/v3/${infuraKey}`;
+        l1RpcUrl = process.env.NEXT_L1_TESTNET_RPC_URL;
+        l2RpcUrl = process.env.NEXT_L2_TESTNET_RPC_URL;
         break;
       default:
         return { lineaSDK: null, lineaSDKContracts: null };
