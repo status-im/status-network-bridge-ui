@@ -1,5 +1,4 @@
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
-import { cookieStorage, createStorage } from "wagmi";
 import { http, injected } from "@wagmi/core";
 import {coinbaseWallet, walletConnect} from "@wagmi/connectors";
 import { config } from "./config";
@@ -47,8 +46,5 @@ export const wagmiConfig = defaultWagmiConfig({
       appName: "Status Network Bridge",
     }),
   ],
-  transports,
-  storage: createStorage({
-    storage: cookieStorage,
-  }),
+  transports
 });
