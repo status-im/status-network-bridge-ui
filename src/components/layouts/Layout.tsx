@@ -14,7 +14,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const { chainId } = useAccount();
 
-  return chainId &&
+  return chainId && // @TODO Change chain id
     ![mainnet.id, sepolia.id, linea.id, lineaSepolia.id].includes(chainId as 1 | 11155111 | 59144 | 59141) ? (
     <WrongNetwork />
   ) : (

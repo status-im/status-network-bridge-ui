@@ -1,7 +1,4 @@
 import { Metadata } from "next";
-import Script from "next/script";
-import usabillaBeScript from "@/scripts/usabilla";
-import { gtmScript, gtmNoScript } from "@/scripts/gtm";
 import { Providers } from "@/components/layouts/Providers";
 import { Layout } from "@/components/layouts/Layout";
 import { cn } from "@/utils/cn";
@@ -26,15 +23,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="description" content={metadata.description?.toString()} key="desc" />
 
       <body className={cn(atypFont.variable, atypTextFont.variable, atypFont.className, atypTextFont.className)}>
-        <noscript dangerouslySetInnerHTML={{ __html: gtmNoScript }} />
 
         <Providers>
           <Layout>{children}</Layout>
         </Providers>
       </body>
 
-      <Script id="usabilla" dangerouslySetInnerHTML={{ __html: usabillaBeScript }} />
-      <Script id="gtm" dangerouslySetInnerHTML={{ __html: gtmScript }} />
     </html>
   );
 }
