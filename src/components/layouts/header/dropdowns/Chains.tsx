@@ -56,7 +56,7 @@ export function Chains() {
   if (networkType !== NetworkType.WRONG_NETWORK && networkType !== NetworkType.UNKNOWN) {
     return (
       <details className="dropdown relative" ref={detailsRef}>
-        <summary className="flex cursor-pointer items-center gap-2 rounded-full border-2 border-card p-2 px-3">
+        <summary className="flex cursor-pointer items-center gap-2 rounded-full bg-cardBg p-2 px-3">
           <Image
             src={chain?.id ? getChainLogoPath(chain.id) : ""}
             alt="Network Icon"
