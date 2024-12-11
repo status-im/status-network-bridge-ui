@@ -31,6 +31,19 @@ export const defaultTokensConfig: NetworkTokens = {
       isDefault: true,
     },
   ],
+  DEVNET: [
+    {
+      name: "Ether",
+      symbol: "ETH",
+      decimals: 18,
+      type: TokenType.ETH,
+      L1: null,
+      L2: null,
+      UNKNOWN: null,
+      image: "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+      isDefault: true,
+    },
+  ],
   UNKNOWN: [
     {
       name: "Ether",

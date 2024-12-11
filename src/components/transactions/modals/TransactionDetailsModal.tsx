@@ -1,6 +1,6 @@
 import { OnChainMessageStatus } from "@consensys/linea-sdk";
 import { formatBalance, formatTimestamp } from "@/utils/format";
-import { NETWORK_ID_TO_NAME } from "@/utils/constants";
+import { CHAIN_ID_TO_NAME } from "@/utils/constants";
 import { MessageWithStatus } from "@/hooks";
 import { TransactionHistory } from "@/models/history";
 import TransactionClaimButton from "./TransactionClaimButton";
@@ -54,7 +54,7 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ trans
         />
 
         <TransactionDetailRow
-          label={`${NETWORK_ID_TO_NAME[transaction.fromChain.id]} Tx Hash`}
+          label={`${CHAIN_ID_TO_NAME[transaction.fromChain.id]} Tx Hash`}
           value={
             <BlockExplorerLink
               blockExplorer={transaction.fromChain.blockExplorers?.default.url}
@@ -64,7 +64,7 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ trans
         />
 
         <TransactionDetailRow
-          label={`${NETWORK_ID_TO_NAME[transaction.toChain.id]} Tx Hash`}
+          label={`${CHAIN_ID_TO_NAME[transaction.toChain.id]} Tx Hash`}
           value={
             <BlockExplorerLink
               blockExplorer={transaction.toChain.blockExplorers?.default.url}
@@ -75,7 +75,7 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ trans
         {message.status === OnChainMessageStatus.CLAIMED && (
           <>
             <TransactionDetailRow
-              label={`${NETWORK_ID_TO_NAME[transaction.fromChain.id]} fees`}
+              label={`${CHAIN_ID_TO_NAME[transaction.fromChain.id]} fees`}
               value={
                 <div>
                   {transaction.toChain.id === 1 ? (
@@ -102,7 +102,7 @@ const TransactionDetailsModal: React.FC<TransactionDetailsModalProps> = ({ trans
               }
             />
             <TransactionDetailRow
-              label={`${NETWORK_ID_TO_NAME[transaction.toChain.id]} fees`}
+              label={`${CHAIN_ID_TO_NAME[transaction.toChain.id]} fees`}
               value={
                 <div>
                   {transaction.toChain.id === 1 ? (

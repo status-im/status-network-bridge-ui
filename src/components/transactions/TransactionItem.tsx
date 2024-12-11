@@ -7,7 +7,7 @@ import { ModalContext } from "@/contexts/modal.context";
 import StatusText from "./StatusText";
 import TransactionProgressBar from "./TransactionProgressBar";
 import TransactionDetailsModal from "./modals/TransactionDetailsModal";
-import { NETWORK_ID_TO_NAME } from "@/utils/constants";
+import { CHAIN_ID_TO_NAME } from "@/utils/constants";
 import { getChainNetworkLayerByChainId } from "@/utils/chainsUtil";
 import { TransactionHistory } from "@/models/history";
 import { MessageWithStatus } from "@/hooks";
@@ -36,7 +36,7 @@ function TransactionNetworkSection({ label, networkId }: { label: string; networ
   return (
     <div className="px-6 md:px-0">
       <div className="text-xs uppercase">{label}</div>
-      <span>{NETWORK_ID_TO_NAME[networkId]}</span>
+      <span>{CHAIN_ID_TO_NAME[networkId]}</span>
     </div>
   );
 }

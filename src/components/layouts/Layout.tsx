@@ -8,14 +8,15 @@ import { useAccount } from "wagmi";
 import { linea, lineaSepolia, mainnet, sepolia } from "viem/chains";
 import WrongNetwork from "./WrongNetwork";
 import TermsModal from "../terms/TermsModal";
+import {availableChainIds} from "@/utils/constants";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   useInitialiseChain();
 
   const { chainId } = useAccount();
 
-  return chainId && // @TODO Change chain id
-    ![mainnet.id, sepolia.id, linea.id, lineaSepolia.id].includes(chainId as 1 | 11155111 | 59144 | 59141) ? (
+  return chainId &&
+    !availableChainIds.includes(chainId) ? (
     <WrongNetwork />
   ) : (
     <div className="flex min-h-screen flex-col bg-cover bg-no-repeat">

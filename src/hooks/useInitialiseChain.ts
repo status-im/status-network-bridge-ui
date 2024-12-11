@@ -4,6 +4,7 @@ import { Chain } from "viem";
 import { Config, config, NetworkLayer, NetworkType, TokenType, wagmiConfig } from "@/config";
 import { useChainStore } from "@/stores/chainStore";
 import { defaultTokensConfig } from "@/stores/tokenStore";
+import {availableChainIds} from "@/utils/constants";
 
 function findLayerByChainId(config: Config, chainId: number | undefined): { network: string; layer: string } | null {
   // Iterate over each network in the config
@@ -55,14 +56,19 @@ const useInitialiseChain = () => {
 
         // Wrong network
         const chainExistsInChains = wagmiConfig.chains.find((chain: Chain) => chain.id === account?.chain?.id);
+        const chainLocallySupported = availableChainIds.find(chainId => chainId === account?.chain?.id);
 
-        if (!chainExistsInChains) {
+        if (!chainExistsInChains || !chainLocallySupported) {
           setNetworkType(NetworkType.WRONG_NETWORK);
           return;
         }
 
         // Get Network Type
-        if (account?.chain?.testnet === true) {
+        if (process.env.NEXT_PUBLIC_USE_DEVNET === "true") {
+          networkType = NetworkType.DEVNET;
+          setNetworkType(networkType);
+          !token && setToken(defaultTokensConfig.SEPOLIA[0]);
+        } else if (account?.chain?.testnet === true) {
           networkType = NetworkType.SEPOLIA;
           setNetworkType(networkType);
           !token && setToken(defaultTokensConfig.SEPOLIA[0]);

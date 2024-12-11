@@ -1,21 +1,21 @@
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { cookieStorage, createStorage } from "wagmi";
 import { http, injected } from "@wagmi/core";
-import { mainnet, sepolia, linea, lineaSepolia } from "@wagmi/core/chains";
 import { walletConnect, coinbaseWallet } from "@wagmi/connectors";
 import { config } from "./config";
+import { chains } from "./wagmiChains"
+import {availableChainIds, CHAIN_ID_TO_DEFAULT_RPC} from "@/utils/constants";
+import {Transport} from "viem";
 
 if (!config.walletConnectId) throw new Error("Project ID is not defined");
 
 const metadata = {
-  name: "Linea Bridge",
-  description: `Linea Bridge is a bridge solution, providing secure and efficient cross-chain transactions between Layer 1 and Linea networks.
-  Discover the future of blockchain interaction with Linea Bridge.`,
-  url: "https://bridge.linea.build",
+  name: "Status Network Bridge",
+  description: `Status Network Bridge is a bridge solution, providing secure and efficient cross-chain transactions between Layer 1 and Status networks.
+  Discover the future of blockchain interaction with Status Network Bridge.`,
+  url: "https://bridge.status.network",
   icons: [],
 };
-
-const chains = [mainnet, sepolia, linea, lineaSepolia] as const;
 
 export const wagmiConfig = defaultWagmiConfig({
   chains,
@@ -37,12 +37,14 @@ export const wagmiConfig = defaultWagmiConfig({
       appName: "Linea Bridge",
     }),
   ],
-  transports: {
-    [mainnet.id]: http(process.env.NEXT_L1_MAINNET_RPC_URL, { batch: true }),
-    [sepolia.id]: http(process.env.NEXT_L1_TESTNET_RPC_URL, { batch: true }),
-    [linea.id]: http(process.env.NEXT_L2_MAINNET_RPC_URL, { batch: true }),
-    [lineaSepolia.id]: http(process.env.NEXT_L2_TESTNET_RPC_URL, { batch: true }),
-  },
+  transports: (() => {
+    const ts: Record<number, Transport> = {};
+    availableChainIds.forEach(chainId => {
+      ts[chainId] = http(CHAIN_ID_TO_DEFAULT_RPC[chainId], { batch: true })
+    })
+
+    return ts;
+  })(),
   storage: createStorage({
     storage: cookieStorage,
   }),

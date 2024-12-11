@@ -9,6 +9,13 @@ import { useChainStore } from "@/stores/chainStore";
 import DropdownItem from "@/components/DropdownItem";
 import { useAccount } from "wagmi";
 import { getChainLogoPath } from "@/utils/chainsUtil";
+import {
+  availableChainIds,
+  availableNetworks,
+  CHAIN_ID_TO_ICON_PATH,
+  CHAIN_ID_TO_NAME,
+  SUPPORTED_NETWORK_TO_CHAIN_ID
+} from "@/utils/constants";
 
 export function Chains() {
   const networkType = useChainStore((state) => state.networkType);
@@ -46,7 +53,7 @@ export function Chains() {
     }
   };
 
-  if (networkType == NetworkType.SEPOLIA || networkType == NetworkType.MAINNET) {
+  if (networkType !== NetworkType.WRONG_NETWORK && networkType !== NetworkType.UNKNOWN) {
     return (
       <details className="dropdown relative" ref={detailsRef}>
         <summary className="flex cursor-pointer items-center gap-2 rounded-full border-2 border-card p-2 px-3">
@@ -63,26 +70,16 @@ export function Chains() {
           </span>
         </summary>
         <ul className="menu dropdown-content absolute right-0 z-10 mt-2 min-w-max border-2 border-card bg-cardBg p-0 shadow">
-          <DropdownItem
-            title={config.networks.MAINNET.L1.name}
-            iconPath={config.networks.MAINNET.L1.iconPath}
-            onClick={() => switchNetworkHandler(config.networks.MAINNET.L1.chainId)}
-          />
-          <DropdownItem
-            title={config.networks.MAINNET.L2.name}
-            iconPath={config.networks.MAINNET.L2.iconPath}
-            onClick={() => switchNetworkHandler(config.networks.MAINNET.L2.chainId)}
-          />
-          <DropdownItem
-            title={config.networks.SEPOLIA.L1.name}
-            iconPath={config.networks.SEPOLIA.L1.iconPath}
-            onClick={() => switchNetworkHandler(config.networks.SEPOLIA.L1.chainId)}
-          />
-          <DropdownItem
-            title={config.networks.SEPOLIA.L2.name}
-            iconPath={config.networks.SEPOLIA.L2.iconPath}
-            onClick={() => switchNetworkHandler(config.networks.SEPOLIA.L2.chainId)}
-          />
+          {
+            availableChainIds.map(chainId => (
+              <DropdownItem
+                key={`${chainId}-nav-dropdown`}
+                title={CHAIN_ID_TO_NAME[chainId]}
+                iconPath={CHAIN_ID_TO_ICON_PATH[chainId]}
+                onClick={() => switchNetworkHandler(chainId)}
+              />
+            ))
+          }
         </ul>
       </details>
     );

@@ -36,7 +36,7 @@ export default function FromChainDropdown() {
     reset();
   };
 
-  if (networkType == NetworkType.SEPOLIA || networkType == NetworkType.MAINNET) {
+  if (networkType !== NetworkType.WRONG_NETWORK && networkType !== NetworkType.UNKNOWN) {
     return (
       <details className="dropdown relative" ref={detailsRef}>
         <summary className="flex cursor-pointer items-center gap-2 rounded-full bg-[#2D2D2D] p-2 px-3 text-white">

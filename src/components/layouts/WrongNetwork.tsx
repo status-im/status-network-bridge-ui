@@ -3,29 +3,13 @@ import Image from "next/image";
 import { linea, lineaSepolia, mainnet, sepolia } from "viem/chains";
 import { wagmiConfig } from "@/config";
 import { Button } from "../ui";
+import {availableChainIds, availableNetworks, CHAIN_ID_TO_ICON_PATH, CHAIN_ID_TO_NAME} from "@/utils/constants";
 
-const supportedChains = [
-  {
-    title: "Ethereum",
-    iconPath: "/images/logo/ethereum-rounded.svg",
-    chainId: mainnet.id,
-  },
-  {
-    title: "Status Mainnet",
-    iconPath: "/images/logo/sn-mainnet.svg",
-    chainId: linea.id,
-  },
-  {
-    title: "Sepolia",
-    iconPath: "/images/logo/ethereum-rounded.svg",
-    chainId: sepolia.id,
-  },
-  {
-    title: "Status Sepolia",
-    iconPath: "/images/logo/sn-sepolia.svg",
-    chainId: lineaSepolia.id,
-  },
-];
+const supportedChains = availableChainIds.map(chainId => ({
+  title: CHAIN_ID_TO_NAME[chainId],
+  iconPath: CHAIN_ID_TO_ICON_PATH[chainId],
+  chainId
+}))
 
 export default function WrongNetwork() {
   return (

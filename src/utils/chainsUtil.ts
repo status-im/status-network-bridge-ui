@@ -1,55 +1,47 @@
-import { NetworkLayer, NetworkType } from "@/config";
-import { linea, mainnet, Chain, sepolia, lineaSepolia } from "viem/chains";
+import {NetworkLayer, NetworkType} from "@/config";
+import {Chain} from "viem/chains";
+import {CHAIN_ID_TO_ICON_PATH, CHAIN_ID_TO_SUPPORTED_NETWORK, ESupportedNetworks} from "@/utils/constants";
 
 export const getChainNetworkLayer = (chain: Chain) => {
-  switch (chain.id) {
-    case linea.id:
-    case lineaSepolia.id:
-      return NetworkLayer.L2;
-    case mainnet.id:
-    case sepolia.id:
-      return NetworkLayer.L1;
-  }
-
-  return;
+  return getChainNetworkLayerByChainId(chain.id)
 };
 
 export const getChainNetworkLayerByChainId = (chainId: number) => {
-  switch (chainId) {
-    case linea.id:
-    case lineaSepolia.id:
-      return NetworkLayer.L2;
-    case mainnet.id:
-    case sepolia.id:
-      return NetworkLayer.L1;
-  }
+  const supportedChain = CHAIN_ID_TO_SUPPORTED_NETWORK[chainId];
 
-  return;
+  switch (supportedChain) {
+    case ESupportedNetworks.DEV_L2:
+    case ESupportedNetworks.STATUS_SEPOLIA:
+    case ESupportedNetworks.STATUS_MAINNET:
+      return NetworkLayer.L2;
+    case ESupportedNetworks.DEV_L1:
+    case ESupportedNetworks.ETH_MAINNET:
+    case ESupportedNetworks.ETH_SEPOLIA:
+      return NetworkLayer.L1;
+    default:
+      return undefined;
+  }
 };
 
 export const getChainNetworkType = (chain: Chain) => {
-  switch (chain.id) {
-    case linea.id:
-    case mainnet.id:
-      return NetworkType.MAINNET;
-    case lineaSepolia.id:
-    case sepolia.id:
-      return NetworkType.SEPOLIA;
-  }
+  const supportedChain = CHAIN_ID_TO_SUPPORTED_NETWORK[chain.id];
 
-  return;
+  switch (supportedChain) {
+    case ESupportedNetworks.DEV_L1:
+    case ESupportedNetworks.DEV_L2:
+    case ESupportedNetworks.ETH_SEPOLIA:
+    case ESupportedNetworks.STATUS_SEPOLIA:
+      return NetworkType.SEPOLIA;
+    case ESupportedNetworks.STATUS_MAINNET:
+    case ESupportedNetworks.ETH_MAINNET:
+      return NetworkType.MAINNET;
+    default:
+      return undefined;
+  }
 };
 
 export const getChainLogoPath = (chainId: number) => {
-  switch (chainId) {
-    case linea.id:
-      return "/images/logo/sn-mainnet.svg";
-    case lineaSepolia.id:
-      return "/images/logo/sn-sepolia.svg";
-    case mainnet.id:
-    case sepolia.id:
-      return "/images/logo/ethereum-rounded.svg";
-    default:
-      return "";
-  }
+  const path = CHAIN_ID_TO_ICON_PATH[chainId]
+  
+  return path ? path : "";
 };

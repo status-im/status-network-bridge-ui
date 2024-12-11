@@ -5,6 +5,7 @@ export enum NetworkType {
   UNKNOWN = "UNKNOWN",
   MAINNET = "MAINNET",
   SEPOLIA = "SEPOLIA",
+  DEVNET = "DEVNET",
   WRONG_NETWORK = "WRONG_NETWORK",
 }
 
@@ -39,6 +40,7 @@ interface LayerConfig {
   messageServiceAddress: Address;
   tokenBridgeAddress: Address;
   usdcBridgeAddress: Address;
+  defaultRPC: string;
 }
 
 interface NetworkConfig {
@@ -67,6 +69,7 @@ export interface Storage {
 export type NetworkTokens = {
   MAINNET: TokenInfo[];
   SEPOLIA: TokenInfo[];
+  DEVNET: TokenInfo[];
   UNKNOWN: TokenInfo[];
 };
 
@@ -99,6 +102,7 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_MAINNET_L1_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_MAINNET_L1_USDC_BRIDGE as Address)
           : ({} as Address),
+        defaultRPC: process.env.NEXT_PUBLIC_L1_MAINNET_RPC_URL
       },
       L2: {
         name: "Status",
@@ -113,6 +117,7 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_MAINNET_LINEA_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_MAINNET_LINEA_USDC_BRIDGE as Address)
           : ({} as Address),
+        defaultRPC: process.env.NEXT_PUBLIC_L2_MAINNET_RPC_URL
       },
       gasEstimated: process.env.NEXT_PUBLIC_MAINNET_GAS_ESTIMATED
         ? BigInt(process.env.NEXT_PUBLIC_MAINNET_GAS_ESTIMATED)
@@ -124,7 +129,6 @@ export const config: Config = {
         ? BigInt(process.env.NEXT_PUBLIC_MAINNET_PROFIT_MARGIN)
         : BigInt(1),
     },
-
     SEPOLIA: {
       L1: {
         name: "Sepolia",
@@ -139,6 +143,7 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_SEPOLIA_L1_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_SEPOLIA_L1_USDC_BRIDGE as Address)
           : ({} as Address),
+        defaultRPC: process.env.NEXT_PUBLIC_L1_TESTNET_RPC_URL
       },
       L2: {
         name: "Status Sepolia",
@@ -153,6 +158,7 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_SEPOLIA_LINEA_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_SEPOLIA_LINEA_USDC_BRIDGE as Address)
           : ({} as Address),
+        defaultRPC: process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL
       },
       gasEstimated: process.env.NEXT_PUBLIC_SEPOLIA_GAS_ESTIMATED
         ? BigInt(process.env.NEXT_PUBLIC_SEPOLIA_GAS_ESTIMATED)
@@ -164,10 +170,49 @@ export const config: Config = {
         ? BigInt(process.env.NEXT_PUBLIC_SEPOLIA_PROFIT_MARGIN)
         : BigInt(1),
     },
+    DEVNET: {
+      L1: {
+        name: "Sepolia Dev",
+        iconPath: "/images/logo/ethereum-rounded.svg",
+        chainId: 31648428,
+        messageServiceAddress: process.env.NEXT_PUBLIC_SEPOLIA_L1_MESSAGE_SERVICE
+          ? (process.env.NEXT_PUBLIC_DEVNET_L1_MESSAGE_SERVICE as Address)
+          : ({} as Address),
+        tokenBridgeAddress: process.env.NEXT_PUBLIC_DEVNET_L1_TOKEN_BRIDGE
+          ? (process.env.NEXT_PUBLIC_DEVNET_L1_TOKEN_BRIDGE as Address)
+          : ({} as Address),
+        usdcBridgeAddress: process.env.NEXT_PUBLIC_DEVNET_L1_USDC_BRIDGE
+          ? (process.env.NEXT_PUBLIC_DEVNET_L1_USDC_BRIDGE as Address)
+          : ({} as Address),
+        defaultRPC: process.env.NEXT_PUBLIC_L1_DEVNET_RPC_URL
+      },
+      L2: {
+        name: "Status Dev",
+        iconPath: "/images/logo/sn-sepolia.svg",
+        chainId: 1337,
+        messageServiceAddress: process.env.NEXT_PUBLIC_DEVNET_LINEA_MESSAGE_SERVICE
+          ? (process.env.NEXT_PUBLIC_DEVNET_LINEA_MESSAGE_SERVICE as Address)
+          : ({} as Address),
+        tokenBridgeAddress: process.env.NEXT_PUBLIC_DEVNET_LINEA_TOKEN_BRIDGE
+          ? (process.env.NEXT_PUBLIC_DEVNET_LINEA_TOKEN_BRIDGE as Address)
+          : ({} as Address),
+        usdcBridgeAddress: process.env.NEXT_PUBLIC_DEVNET_LINEA_USDC_BRIDGE
+          ? (process.env.NEXT_PUBLIC_DEVNET_LINEA_USDC_BRIDGE as Address)
+          : ({} as Address),
+        defaultRPC: process.env.NEXT_PUBLIC_L2_DEVNET_RPC_URL
+      },
+      gasEstimated: process.env.NEXT_PUBLIC_DEVNET_GAS_ESTIMATED
+        ? BigInt(process.env.NEXT_PUBLIC_DEVNET_GAS_ESTIMATED)
+        : BigInt(100000),
+      gasLimitSurplus: process.env.NEXT_PUBLIC_DEVNET_DEFAULT_GAS_LIMIT_SURPLUS
+        ? BigInt(process.env.NEXT_PUBLIC_DEVNET_DEFAULT_GAS_LIMIT_SURPLUS)
+        : BigInt(6000),
+      profitMargin: process.env.NEXT_PUBLIC_DEVNET_PROFIT_MARGIN
+        ? BigInt(process.env.NEXT_PUBLIC_DEVNET_PROFIT_MARGIN)
+        : BigInt(1),
+    }
   },
-
   walletConnectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID,
-
   storage: {
     // The storage will be cleared if its version is smaller than the one configured
     minVersion: process.env.NEXT_PUBLIC_STORAGE_MIN_VERSION || "1",
