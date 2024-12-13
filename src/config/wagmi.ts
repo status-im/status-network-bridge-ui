@@ -1,7 +1,7 @@
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { cookieStorage, createStorage } from "wagmi";
 import { http, injected } from "@wagmi/core";
-import { walletConnect, coinbaseWallet } from "@wagmi/connectors";
+import { coinbaseWallet } from "@wagmi/connectors";
 import { config } from "./config";
 import { chains } from "./wagmiChains"
 import {availableChainIds, CHAIN_ID_TO_DEFAULT_RPC} from "@/utils/constants";
@@ -17,6 +17,15 @@ const metadata = {
   icons: [],
 };
 
+const getTransports = () => {
+  const ts: Record<number, Transport> = {};
+  availableChainIds.forEach(chainId => {
+    ts[chainId] = http(CHAIN_ID_TO_DEFAULT_RPC[chainId], { batch: true })
+  })
+
+  return ts;
+}
+
 export const wagmiConfig = defaultWagmiConfig({
   chains,
   projectId: config.walletConnectId,
@@ -28,23 +37,12 @@ export const wagmiConfig = defaultWagmiConfig({
     multicall: true,
   },
   connectors: [
-    walletConnect({
-      projectId: config.walletConnectId,
-      showQrModal: false,
-    }),
     injected({ shimDisconnect: true }),
     coinbaseWallet({
       appName: "Linea Bridge",
     }),
   ],
-  transports: (() => {
-    const ts: Record<number, Transport> = {};
-    availableChainIds.forEach(chainId => {
-      ts[chainId] = http(CHAIN_ID_TO_DEFAULT_RPC[chainId], { batch: true })
-    })
-
-    return ts;
-  })(),
+  transports: getTransports(),
   storage: createStorage({
     storage: cookieStorage,
   }),

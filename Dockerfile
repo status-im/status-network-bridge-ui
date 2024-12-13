@@ -1,39 +1,37 @@
-FROM node:lts-alpine AS base
-
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+FROM node:18 as base
 
 FROM base AS builder
 
 ARG NEXT_PUBLIC_WALLET_CONNECT_ID
-ARG NEXT_L1_TESTNET_RPC_URL
-ARG NEXT_L1_MAINNET_RPC_URL
-ARG NEXT_L2_TESTNET_RPC_URL
-ARG NEXT_L2_MAINNET_RPC_URL
+ARG NEXT_PUBLIC_L1_TESTNET_RPC_URL
+ARG NEXT_PUBLIC_L1_MAINNET_RPC_URL
+ARG NEXT_PUBLIC_L2_TESTNET_RPC_URL
+ARG NEXT_PUBLIC_L2_MAINNET_RPC_URL
 
 ENV NEXT_PUBLIC_WALLET_CONNECT_ID=$NEXT_PUBLIC_WALLET_CONNECT_ID
-ENV NEXT_L1_TESTNET_RPC_URL=$NEXT_L1_TESTNET_RPC_URL
-ENV NEXT_L1_MAINNET_RPC_URL=$NEXT_L1_MAINNET_RPC_URL
-ENV NEXT_L2_TESTNET_RPC_URL=$NEXT_L2_TESTNET_RPC_URL
-ENV NEXT_L2_MAINNET_RPC_URL=$NEXT_L2_MAINNET_RPC_URL
+ENV NEXT_PUBLIC_L1_TESTNET_RPC_URL=$NEXT_PUBLIC_L1_TESTNET_RPC_URL
+ENV NEXT_PUBLIC_L1_MAINNET_RPC_URL=$NEXT_PUBLIC_L1_MAINNET_RPC_URL
+ENV NEXT_PUBLIC_L2_TESTNET_RPC_URL=$NEXT_PUBLIC_L2_TESTNET_RPC_URL
+ENV NEXT_PUBLIC_L2_MAINNET_RPC_URL=$NEXT_PUBLIC_L2_MAINNET_RPC_URL
+
 ARG ENV_FILE
 
 WORKDIR /app
 
-RUN mkdir -p bridge-ui
+# Copy package.json and yarn.lock first for dependency installation
+COPY package.json ./
+COPY yarn.lock ./
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json .eslintrc.js .prettierrc.js ./
+RUN yarn install
 
-COPY ./bridge-ui ./bridge-ui
-COPY $ENV_FILE ./bridge-ui/.env.production
+# Copy application source and environment file
+COPY . ./
+COPY .env ./
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store apk add --virtual build-dependencies --no-cache python3 make g++ \
-    && pnpm install --frozen-lockfile --prefer-offline \
-    && pnpm run -F bridge-ui build \
-    && apk del build-dependencies
+# Build the application
+RUN yarn build
 
-FROM node:lts-alpine AS runner
+FROM base AS runner
 
 ARG X_TAG
 
@@ -44,8 +42,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 USER node
 
-COPY --from=builder --chown=node:node /app/bridge-ui/.next/standalone ./
-COPY --from=builder --chown=node:node /app/bridge-ui/public ./bridge-ui/public
-COPY --from=builder --chown=node:node /app/bridge-ui/.next/static ./bridge-ui/.next/static
+# Copy built files from the builder stage
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 
-CMD ["node", "./bridge-ui/server.js"]
+# Start the application
+CMD ["node", "./server.js"]
