@@ -25,6 +25,7 @@ const getTransports = () => {
 
   return ts;
 }
+const transports = getTransports()
 
 export const wagmiConfig = defaultWagmiConfig({
   chains,
@@ -42,7 +43,7 @@ export const wagmiConfig = defaultWagmiConfig({
       appName: "Linea Bridge",
     }),
   ],
-  transports: getTransports(),
+  transports,
   storage: createStorage({
     storage: cookieStorage,
   }),

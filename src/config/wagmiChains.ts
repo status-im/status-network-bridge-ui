@@ -1,5 +1,6 @@
-import { lineaSepolia } from "@wagmi/core/chains";
+import { lineaSepolia, sepolia } from "@wagmi/core/chains";
 import { defineChain } from "viem";
+import {ESupportedNetworks, SUPPORTED_NETWORK_TO_CHAIN_ID} from "@/utils/constants";
 
 const devL1 = defineChain({
   id: 31648428,
@@ -53,7 +54,7 @@ const devL2 = defineChain({
 })
 
 const statusSepolia = defineChain({
-  id: 12341234512345, // @TODO Assign actual ID
+  id: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.STATUS_SEPOLIA],
   name: "Status Network Sepolia",
   nativeCurrency: {
     name: "Status Sepolia Ether",
@@ -62,7 +63,7 @@ const statusSepolia = defineChain({
   },
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_L1_TESTNET_RPC_URL]
+      http: [process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL]
     }
   },
   blockExplorers: {
@@ -78,6 +79,6 @@ const statusSepolia = defineChain({
 })
 
 const devnetChains = [devL1, devL2] as const;
-const productionChains = [statusSepolia] as const;
+const productionChains = [sepolia, statusSepolia] as const;
 
-export const chains = process.env.NEXT_PUBLIC_USE_DEVNET ? devnetChains : productionChains;
+export const chains = process.env.NEXT_PUBLIC_USE_DEVNET === "true" ? devnetChains : productionChains;
