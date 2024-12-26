@@ -18,6 +18,7 @@ const parseETHEvents = async (
   if (
     networkType !== NetworkType.MAINNET &&
     networkType !== NetworkType.SEPOLIA &&
+    networkType !== NetworkType.DEVNET &&
     networkType !== NetworkType.UNKNOWN
   ) {
     throw new Error("Invalid network type");

@@ -1,8 +1,8 @@
-import { useMemo } from "react";
-import { LineaSDK, Network } from "@consensys/linea-sdk";
-import { L1MessageServiceContract, L2MessageServiceContract } from "@consensys/linea-sdk/dist/lib/contracts";
+import {useMemo} from "react";
+import {LineaSDK} from "@consensys/linea-sdk";
+import {L1MessageServiceContract, L2MessageServiceContract} from "@consensys/linea-sdk/dist/lib/contracts";
 import {config, NetworkType} from "@/config";
-import { useChainStore } from "@/stores/chainStore";
+import {useChainStore} from "@/stores/chainStore";
 
 interface LineaSDKContracts {
   L1: L1MessageServiceContract;
@@ -17,12 +17,13 @@ const useLineaSDK = () => {
       (process.env.NEXT_PUBLIC_L1_MAINNET_RPC_URL && process.env.NEXT_PUBLIC_L2_MAINNET_RPC_URL) ||
       (process.env.NEXT_PUBLIC_L1_TESTNET_RPC_URL && process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL)
 
-    if (rpcUrlAvailable) return { lineaSDK: null, lineaSDKContracts: null };
+    if (!rpcUrlAvailable) return { lineaSDK: null, lineaSDKContracts: null };
 
     let l1RpcUrl;
     let l2RpcUrl;
 
-    if (networkType) {
+    const isUsableNetworkType = networkType !== NetworkType.WRONG_NETWORK && networkType !== NetworkType.UNKNOWN;
+    if (networkType && isUsableNetworkType) {
       l1RpcUrl = config.networks[networkType].L1.defaultRPC;
       l2RpcUrl = config.networks[networkType].L2.defaultRPC;
     } else {
@@ -32,7 +33,7 @@ const useLineaSDK = () => {
     const sdk = new LineaSDK({
       l1RpcUrl,
       l2RpcUrl,
-      network: `linea-${networkType.toLowerCase()}` as Network,
+      network: 'localhost',
       mode: "read-only",
     });
 
