@@ -69,8 +69,8 @@ const statusSepolia = defineChain({
   blockExplorers: {
     default: {
       name: 'Blockscout',
-      url: 'http://localhost:1234',
-      apiUrl: 'http://localhost:1234/api'
+      url: 'https://linea-24-blockscout.dev.eu-west-4.gateway.fm/',
+      apiUrl: 'https://linea-24-blockscout.dev.eu-west-4.gateway.fm/api'
     }
   },
   contracts: {

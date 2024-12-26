@@ -1,7 +1,7 @@
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { cookieStorage, createStorage } from "wagmi";
 import { http, injected } from "@wagmi/core";
-import { coinbaseWallet } from "@wagmi/connectors";
+import {coinbaseWallet, walletConnect} from "@wagmi/connectors";
 import { config } from "./config";
 import { chains } from "./wagmiChains"
 import {availableChainIds, CHAIN_ID_TO_DEFAULT_RPC} from "@/utils/constants";
@@ -38,9 +38,13 @@ export const wagmiConfig = defaultWagmiConfig({
     multicall: true,
   },
   connectors: [
+    walletConnect({
+      projectId: config.walletConnectId,
+      showQrModal: false,
+    }),
     injected({ shimDisconnect: true }),
     coinbaseWallet({
-      appName: "Linea Bridge",
+      appName: "Status Network Bridge",
     }),
   ],
   transports,
