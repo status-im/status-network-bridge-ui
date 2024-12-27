@@ -32,6 +32,7 @@ export default function TermsModal() {
     return null;
   }
 
+  // @TODO Update terms here
   return (
     <div
       ref={termsModalRef}
@@ -43,7 +44,7 @@ export default function TermsModal() {
     >
       <h2 className="text-xl font-normal">Terms of Use</h2>
       <div className="mb-2 text-xs font-normal leading-relaxed">
-        Linea Mainnet is in Alpha — click{" "}
+        Status Network is in Alpha — click{" "}
         <Link href="https://docs.linea.build/risk-disclosures" target="_blank" className="mr-1 font-extrabold">
           here
         </Link>

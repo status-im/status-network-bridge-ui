@@ -5,7 +5,6 @@ import { Header } from "./header";
 import { useInitialiseChain } from "@/hooks";
 import Sidebar from "./Sidebar";
 import { useAccount } from "wagmi";
-import { linea, lineaSepolia, mainnet, sepolia } from "viem/chains";
 import WrongNetwork from "./WrongNetwork";
 import TermsModal from "../terms/TermsModal";
 import {availableChainIds} from "@/utils/constants";

@@ -2,8 +2,7 @@ import { Metadata } from "next";
 import { Providers } from "@/components/layouts/Providers";
 import { Layout } from "@/components/layouts/Layout";
 import { cn } from "@/utils/cn";
-import atypFont from "@/assets/fonts/atyp";
-import atypTextFont from "@/assets/fonts/atypText";
+import openSansFont from "@/assets/fonts/openSans";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
@@ -22,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <title>{metadata.title?.toString()}</title>
       <meta name="description" content={metadata.description?.toString()} key="desc" />
 
-      <body className={cn(atypFont.variable, atypTextFont.variable, atypFont.className, atypTextFont.className)}>
+      <body className={cn(openSansFont.variable, openSansFont.className)}>
 
         <Providers>
           <Layout>{children}</Layout>

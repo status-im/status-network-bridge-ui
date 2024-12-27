@@ -8,6 +8,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import { BridgeForm } from "@/models";
 import { useChainStore } from "@/stores/chainStore";
 import { TokenType } from "@/config";
+import Image from "next/image";
+import Hero from "../../../public/images/hero.webp"
 
 export default function BridgeLayout() {
   const { isConnected } = useAccount();
@@ -29,6 +31,7 @@ export default function BridgeLayout() {
 
   return (
     <>
+      <Image src={Hero} alt={"Hero image"}/>
       {!isConnected && (
         <div className="mb-4 min-w-min max-w-lg rounded-lg bg-cardBg p-2 shadow-lg">
           <BridgeExternal />

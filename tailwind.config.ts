@@ -13,16 +13,16 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          light: "#C4F3FF",
-          DEFAULT: "#61DFFF",
+          light: "#a8b3ef",
+          DEFAULT: "#2a4af5",
         },
         secondary: {
-          light: "#EBE2FD",
-          DEFAULT: "#6119EF",
+          light: "#cdece0",
+          DEFAULT: "#216266",
         },
         orange: {
           light: "#FFF1E9",
-          DEFAULT: "#FF8D4C",
+          DEFAULT: "#FF8F6B",
         },
         card: "#505050",
         cardBg: "#FFFFFF",
@@ -32,8 +32,7 @@ const config: Config = {
         success: "#C1FF14",
       },
       fontFamily: {
-        atyp: ["var(--font-atyp)"],
-        atypText: ["var(--font-atyp-text)"],
+        openSans: ["var(--font-open-sans)"]
       },
     },
   },
@@ -43,8 +42,8 @@ const config: Config = {
       {
         light: {
           ...daisyuiThemes.light,
-          primary: "#61DFFF",
-          secondary: "#6119EF",
+          primary: "#4360DF",
+          secondary: "#216266",
           warning: "#FF8D4C",
           info: "#61DFFF",
           success: "#C1FF14",

@@ -6,13 +6,13 @@ import { FooterLinks, SocialLinks } from "./footer";
 export default function Sidebar() {
   return (
     <aside id="sidebar" className="fixed left-0 top-0 z-40 hidden h-screen w-52 md:block" aria-label="Sidebar">
-      <div className="flex h-full flex-col justify-between overflow-y-auto bg-cardBg py-4">
+      <div className="bg-black flex h-full flex-col justify-between overflow-y-auto py-4">
         <div>
           <div className="flex h-24 items-center p-4">
             <Link href="/">
               <Image
                 src={"/images/logo/status-network.svg"}
-                alt="Linea logo"
+                alt="Status Network logo"
                 width={0}
                 height={0}
                 priority
