@@ -148,7 +148,7 @@ export const config: Config = {
       L2: {
         name: "Status Sepolia",
         iconPath: "/images/logo/sn-sepolia.svg",
-        chainId: 1847405030,
+        chainId: 1660990954,
         messageServiceAddress: process.env.NEXT_PUBLIC_SEPOLIA_LINEA_MESSAGE_SERVICE
           ? (process.env.NEXT_PUBLIC_SEPOLIA_LINEA_MESSAGE_SERVICE as Address)
           : ({} as Address),

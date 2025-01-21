@@ -37,7 +37,7 @@ export enum ESupportedNetworks {
 export const SUPPORTED_NETWORK_TO_CHAIN_ID: Record<ESupportedNetworks, number> = {
   [ESupportedNetworks.ETH_SEPOLIA]: 11155111,
   [ESupportedNetworks.ETH_MAINNET]: 1,
-  [ESupportedNetworks.STATUS_SEPOLIA]: 1847405030,
+  [ESupportedNetworks.STATUS_SEPOLIA]: 1660990954,
   [ESupportedNetworks.STATUS_MAINNET]: 895616596,
   [ESupportedNetworks.DEV_L1]: 31648428,
   [ESupportedNetworks.DEV_L2]: 1337
