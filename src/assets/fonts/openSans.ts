@@ -34,12 +34,12 @@ const openSansFont = localFont({
       style: "italic",
     },
     {
-      path: "../../../public/fonts/OpenSans/OpenSans-Semibold.ttf",
+      path: "../../../public/fonts/OpenSans/OpenSans-SemiBold.ttf",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../../../public/fonts/OpenSans/OpenSans-SemiboldItalic.ttf",
+      path: "../../../public/fonts/OpenSans/OpenSans-SemiBoldItalic.ttf",
       weight: "600",
       style: "italic",
     },
