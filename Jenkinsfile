@@ -10,6 +10,16 @@ pipeline {
       description: 'Docker registry ',
       defaultValue: params.DOCKER_REGISTRY ?: 'harbor.status.im',
     )
+    string(
+      name: 'IMAGE_NAME',
+      description: 'Docker image name to push.',
+      defaultValue: params.IMAGE_NAME ?: 'harbor.status.im/status-im/bridge-status-network',
+    )
+    string(
+      name: 'IMAGE_TAG',
+      description: 'Docker image tag to push.',
+      defaultValue: params.IMAGE_TAG ?: 'deploy-develop',
+    )
   }
 
   options {
@@ -71,7 +81,7 @@ pipeline {
       steps {
         script {
           withDockerRegistry([credentialsId: 'harbor-status-im-bridge-robot', url: 'https://${DOCKER_REGISTRY}']) {
-            image.push(params.IMAGE_NAME)
+            image.push(params.IMAGE_TAG)
           }
         }
       }
