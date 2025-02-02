@@ -18,6 +18,10 @@ ARG ENV_FILE
 
 WORKDIR /app
 
+# Listening port for docker healthchecks
+ARG PORT=3000
+EXPOSE ${PORT}
+
 # Enable Corepack and set up Yarn v4
 RUN corepack enable && corepack prepare yarn@4.6.0 --activate
 
