@@ -182,7 +182,8 @@ export async function validateTokenURI(url: string): Promise<string> {
 }
 
 export async function formatToken(token: Token): Promise<TokenInfo> {
-  const tokenType = token.symbol === USDC_TYPE ? TokenType.USDC : TokenType.ERC20;
+  //const tokenType = token.symbol === USDC_TYPE ? TokenType.USDC : TokenType.ERC20; @TODO Re-add when USDC bridge gets deployed
+  const tokenType = TokenType.ERC20;
 
   const logoURI = await validateTokenURI(token.logoURI);
 
