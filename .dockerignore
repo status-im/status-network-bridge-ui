@@ -2,6 +2,8 @@
 !src
 !package.json
 !yarn.lock
+!.yarn
+!.yarnrc.yml
 !public
 !next.config.mjs
 !tsconfig.json

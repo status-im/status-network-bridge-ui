@@ -1,4 +1,4 @@
-FROM node:18 as base
+FROM node:18 AS base
 
 FROM base AS builder
 
@@ -18,9 +18,17 @@ ARG ENV_FILE
 
 WORKDIR /app
 
-# Copy package.json and yarn.lock first for dependency installation
-COPY package.json ./
-COPY yarn.lock ./
+# Listening port for docker healthchecks
+ARG PORT=3000
+EXPOSE ${PORT}
+
+# Enable Corepack and set up Yarn v4
+RUN corepack enable && corepack prepare yarn@4.6.0 --activate
+
+# Copy package.json, yarn.lock and .yarnrc.yml first for dependency installation
+COPY package.json yarn.lock .yarnrc.yml ./
+# We also need patches introduced in https://github.com/status-im/status-network-bridge-ui/commit/9281505
+COPY .yarn ./.yarn
 
 RUN yarn install
 
