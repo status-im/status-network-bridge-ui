@@ -18,19 +18,31 @@ To start Linea Bridge UI for development:
 cp .env.template .env
 ```
 
-2. Install packages:
+2. Install packages: (needs yarn 4.x)
 
 ```shell
-npm i
+yarn
+```
+
+OR
+
+Build with the nix flake (needs nix) 
+```shell
+nix develop
 ```
 
 3. Start the development server, execute:
 
 ```shell
-npm run dev
+yarn start
 ```
 
 Frontend should be available at: http://localhost:3000
+
+## CI/CD
+
+- The `master` branch is automatically deployed to the production server (e.g., https://bridge.status.network) through [CI](https://ci.infra.status.im/job/website/job/bridge.status.network)
+- The `develop` branch is automatically deployed to the staging server (e.g., https://dev-bridge.status.network) through [CI](ci.infra.status.im/job/website/job/dev-bridge.status.network)
 
 ## Config
 
