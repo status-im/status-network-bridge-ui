@@ -2,6 +2,7 @@ import Image from "next/image";
 
 type HeaderLogoProps = {
   pathname: string;
+  darkLogo?: boolean;
 };
 
 function formatPath(pathname: string): string {
@@ -18,10 +19,10 @@ function formatPath(pathname: string): string {
   }
 }
 
-export const HeaderLogo: React.FC<HeaderLogoProps> = ({ pathname }) => (
+export const HeaderLogo: React.FC<HeaderLogoProps> = ({ pathname, darkLogo }) => (
   <div className="flex-1">
     <Image
-      src={"/images/logo/status-network.svg"}
+      src={darkLogo ? "/images/logo/status-network-black.svg" : "/images/logo/status-network.svg"}
       alt="Linea logo"
       width={0}
       height={0}

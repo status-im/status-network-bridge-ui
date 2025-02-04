@@ -9,7 +9,7 @@ import { BridgeForm } from "@/models";
 import { useChainStore } from "@/stores/chainStore";
 import { TokenType } from "@/config";
 import Image from "next/image";
-import Hero from "../../../public/images/hero.webp"
+import Girl from "../../../public/images/girl.gif"
 
 export default function BridgeLayout() {
   const { isConnected } = useAccount();
@@ -30,8 +30,8 @@ export default function BridgeLayout() {
   });
 
   return (
-    <>
-      <Image src={Hero} alt={"Hero image"}/>
+    <div className="flex flex-col align-items-center">
+      <Image src={Girl} alt={"Hero image"} height={200} className="self-end"/>
       {!isConnected && (
         <div className="mb-4 min-w-min max-w-lg rounded-lg bg-cardBg p-2 shadow-lg">
           <BridgeExternal />
@@ -40,6 +40,6 @@ export default function BridgeLayout() {
       <FormProvider {...methods}>
         <Bridge />
       </FormProvider>
-    </>
+    </div>
   );
 }
