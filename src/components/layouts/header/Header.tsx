@@ -27,7 +27,7 @@ export function Header() {
 
   return (
     <header className="navbar flex items-center justify-between gap-3 p-3 md:p-10">
-      <HeaderLogo pathname={pathname} />
+      <HeaderLogo pathname={pathname} darkLogo={true}/>
       <NavMenu isConnected={isConnected} />
 
       <div className="flex items-center">

@@ -1,0 +1,9 @@
+.MenuItem {
+    background: linear-gradient(to right, transparent 60%, var(--background-color) 100%) left;
+    background-size: 200%;
+    transition: .2s ease-out;
+}
+
+.MenuItem:hover {
+    background-position: right;
+}

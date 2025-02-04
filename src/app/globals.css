@@ -7,13 +7,13 @@
   --toastify-color-success: #7adffd;
   --toastify-color-progress-success: #7adffd;
 
-  --background-color: #F8F7F2;
+  --background-color: #FBFBFB;
   --yellow: #FFF068;
 }
 
 body {
   background:
-          radial-gradient(circle at 0% 0%, rgba(67, 96, 223, 0.2) 0%, transparent 50%),
+          radial-gradient(circle at 0% 0%, #FBFBFB 0%, transparent 50%),
           radial-gradient(circle at 100% 0%, rgba(136, 122, 249, 0.2) 0%, transparent 50%),
           radial-gradient(circle at 100% 100%, rgba(81, 208, 240, 0.2) 0%, transparent 50%),
           radial-gradient(circle at 0% 100%, rgba(81, 208, 167, 0.2) 0%, transparent 50%);

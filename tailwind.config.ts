@@ -14,11 +14,11 @@ const config: Config = {
       colors: {
         primary: {
           light: "#a8b3ef",
-          DEFAULT: "#2a4af5",
+          DEFAULT: "#7140FD",
         },
         secondary: {
           light: "#cdece0",
-          DEFAULT: "#216266",
+          DEFAULT: "#3D96A5",
         },
         orange: {
           light: "#FFF1E9",
@@ -42,8 +42,8 @@ const config: Config = {
       {
         light: {
           ...daisyuiThemes.light,
-          primary: "#4360DF",
-          secondary: "#216266",
+          primary: "#7140FD",
+          secondary: "#3D96A5",
           warning: "#FF8D4C",
           info: "#61DFFF",
           success: "#C1FF14",
