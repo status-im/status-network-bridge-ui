@@ -25,7 +25,7 @@
           packages = with pkgsFor.${system}.buildPackages; [
             git
             openssh
-            yarn # 1.22.22
+            yarn-berry # yarn 4.2.2
             nodejs_20 # v20.15.1
             ghp-import # 2.1.0
           ];
