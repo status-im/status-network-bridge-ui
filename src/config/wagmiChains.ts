@@ -1,6 +1,7 @@
 import { lineaSepolia, sepolia } from "@wagmi/core/chains";
 import { defineChain } from "viem";
 import {ESupportedNetworks, SUPPORTED_NETWORK_TO_CHAIN_ID} from "@/utils/constants";
+import { AppKitNetwork } from "@reown/appkit/networks";
 
 const devL1 = defineChain({
   id: 31648428,
@@ -69,8 +70,8 @@ const statusSepolia = defineChain({
   blockExplorers: {
     default: {
       name: 'Blockscout',
-      url: 'https://status-sepolia-blockscout.eu-north-2.gateway.fm/',
-      apiUrl: 'https://status-sepolia-blockscout.eu-north-2.gateway.fm/api'
+      url: 'https://sepoliascan.status.network/',
+      apiUrl: 'https://sepoliascan.status.network/api'
     }
   },
   contracts: {
@@ -78,7 +79,8 @@ const statusSepolia = defineChain({
   testnet: true,
 })
 
-const devnetChains = [devL1, devL2] as const;
-const productionChains = [sepolia, statusSepolia] as const;
+const devnetChains = [devL1, devL2];
+const productionChains = [sepolia, statusSepolia];
 
-export const chains = process.env.NEXT_PUBLIC_USE_DEVNET === "true" ? devnetChains : productionChains;
+// @ts-ignore
+export const chains: [AppKitNetwork, ...AppKitNetwork[]] = process.env.NEXT_PUBLIC_USE_DEVNET === "true" ? devnetChains : productionChains;
