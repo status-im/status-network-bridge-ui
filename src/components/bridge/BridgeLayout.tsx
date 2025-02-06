@@ -1,8 +1,6 @@
 "use client";
 
-import { useAccount } from "wagmi";
 import Bridge from "../bridge/Bridge";
-import { BridgeExternal } from "./BridgeExternal";
 import { useTokenStore } from "@/stores/tokenStoreProvider";
 import { FormProvider, useForm } from "react-hook-form";
 import { BridgeForm } from "@/models";
@@ -12,8 +10,6 @@ import Image from "next/image";
 import Girl from "../../../public/images/girl.gif"
 
 export default function BridgeLayout() {
-  const { isConnected } = useAccount();
-
   const configContextValue = useTokenStore((state) => state.tokensList);
   const token = useChainStore((state) => state.token);
 
@@ -32,11 +28,6 @@ export default function BridgeLayout() {
   return (
     <div className="flex flex-col align-items-center">
       <Image src={Girl} alt={"Hero image"} height={200} className="self-end"/>
-      {!isConnected && (
-        <div className="mb-4 min-w-min max-w-lg rounded-lg bg-cardBg p-2 shadow-lg">
-          <BridgeExternal />
-        </div>
-      )}
       <FormProvider {...methods}>
         <Bridge />
       </FormProvider>
