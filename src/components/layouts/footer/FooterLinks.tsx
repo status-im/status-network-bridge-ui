@@ -8,7 +8,7 @@ export const FooterLinks = ({ toggleMenu }: FooterLinksProps) => (
   <div className="space-y-2 py-4 text-white">
     <Link
       className="flex items-center hover:text-primary"
-      href="https://linea.build/privacy-policy"
+      href="https://status.network/privacy-policy"
       passHref
       target="_blank"
       rel="noopener noreferrer"
@@ -18,7 +18,7 @@ export const FooterLinks = ({ toggleMenu }: FooterLinksProps) => (
     </Link>
     <Link
       className="flex items-center hover:text-primary"
-      href="https://linea.build/terms-of-service"
+      href="https://status.network/terms-of-service"
       passHref
       target="_blank"
       rel="noopener noreferrer"

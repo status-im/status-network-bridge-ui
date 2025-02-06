@@ -44,14 +44,10 @@ export default function TermsModal() {
     >
       <h2 className="text-xl font-normal">Terms of Use</h2>
       <div className="mb-2 text-xs font-normal leading-relaxed">
-        Status Network is in Alpha — click{" "}
-        <Link href="https://docs.linea.build/risk-disclosures" target="_blank" className="mr-1 font-extrabold">
-          here
-        </Link>
-        to learn more about the risks and security measures. I agree and accept that my use of the services is subject
-        to the Linea Terms of Use, which contains an arbitration provision and class action waiver{" "}
-        <Link href="https://linea.build/terms-of-service" target="_blank" className="ml-1 font-extrabold">
-          (Terms of Service | Linea )
+        I understand and agree to comply with the Status Network Testnet Terms and Conditions in connection with my participation in the Status Network Testnet Programme.
+        <br/>
+        <Link href="https://status.network/terms-of-service" target="_blank" className="ml-1 font-extrabold">
+          (Terms of Service | Status Network )
         </Link>{" "}
       </div>
       <Button
