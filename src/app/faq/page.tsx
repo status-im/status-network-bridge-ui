@@ -140,6 +140,13 @@ export default function FaqPage() {
             .
           </p>
         </Collapse>
+
+        <Collapse title="How can I deposit to main-net of Status Network?">
+          <p>
+            Status Network is currently in test-net phase and deposits to the main-net instance of the
+            network will come later
+          </p>
+        </Collapse>
       </div>
     </div>
   );
