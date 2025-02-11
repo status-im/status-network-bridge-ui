@@ -23,6 +23,12 @@ export const MENU_ITEMS = [
     external: true,
     Icon: DocsIcon,
   },
+  {
+    title: "FaQ",
+    href: "/faq",
+    external: false,
+    Icon: FaqIcon,
+  }
 ];
 
 export enum ESupportedNetworks {
