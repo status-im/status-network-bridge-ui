@@ -19,7 +19,7 @@ export const MENU_ITEMS = [
   },
   {
     title: "Docs",
-    href: "https://docs.status.network/general-info/bridge/bridge-to-status",
+    href: "https://docs.status.network/general-info/bridge/bridging-testnet",
     external: true,
     Icon: DocsIcon,
   },
