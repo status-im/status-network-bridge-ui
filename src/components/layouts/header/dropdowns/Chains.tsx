@@ -4,17 +4,15 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { switchChain } from "@wagmi/core";
 import log from "loglevel";
-import { config, NetworkLayer, NetworkType, wagmiConfig } from "@/config";
+import { NetworkLayer, NetworkType, wagmiConfig } from "@/config";
 import { useChainStore } from "@/stores/chainStore";
 import DropdownItem from "@/components/DropdownItem";
 import { useAccount } from "wagmi";
 import { getChainLogoPath } from "@/utils/chainsUtil";
 import {
   availableChainIds,
-  availableNetworks,
   CHAIN_ID_TO_ICON_PATH,
   CHAIN_ID_TO_NAME,
-  SUPPORTED_NETWORK_TO_CHAIN_ID
 } from "@/utils/constants";
 
 export function Chains() {
@@ -69,7 +67,7 @@ export function Chains() {
             {chain?.name ? (chain.name === "Linea Sepolia Testnet" ? "Linea Sepolia" : chain.name) : ""}
           </span>
         </summary>
-        <ul className="menu dropdown-content absolute right-0 z-10 mt-2 min-w-max border-2 border-card bg-cardBg p-0 shadow">
+        <ul className="menu dropdown-content absolute right-0 z-10 mt-2 min-w-max border-2 bg-cardBg p-0 shadow">
           {
             availableChainIds.map(chainId => (
               <DropdownItem

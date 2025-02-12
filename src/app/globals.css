@@ -9,6 +9,7 @@
 
   --background-color: #FBFBFB;
   --yellow: #FFF068;
+  --sky-blue: #3D96A5
 }
 
 body {
@@ -49,25 +50,25 @@ body {
   }
 
   .tooltip-top::after {
-    border-color: var(--yellow) transparent transparent transparent;
+    border-color: var(--sky-blue) transparent transparent transparent;
   }
   
   .tooltip-right::after {
-    border-color: transparent var(--yellow) transparent transparent;
+    border-color: transparent var(--sky-blue) transparent transparent;
   }
   
   .tooltip-bottom::after {
-    border-color: transparent transparent var(--yellow) transparent;
+    border-color: transparent transparent var(--sky-blue) transparent;
   }
   
   .tooltip-left::after {
-    border-color: transparent transparent transparent var(--yellow);
+    border-color: transparent transparent transparent var(--sky-blue);
   }
 
   .tooltip:before {
-    border: 1px solid var(--yellow);
-    background-color: var(--yellow);
-    color: #525252;
+    border: 1px solid var(--sky-blue);
+    background-color: var(--sky-blue);
+    color: white;
     border-radius: 8px;
     padding: 8px;
   }

@@ -18,8 +18,9 @@ const config: Config = {
         },
         secondary: {
           light: "#cdece0",
-          DEFAULT: "#3D96A5",
+          DEFAULT: "var(--sky-blue)",
         },
+        dragonPurple: "#948BD5",
         orange: {
           light: "#FFF1E9",
           DEFAULT: "#FF8F6B",
