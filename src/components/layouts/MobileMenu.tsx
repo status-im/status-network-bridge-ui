@@ -10,7 +10,7 @@ type MobileMenuProps = {
 
 export default function MobileMenu({ toggleMenu }: MobileMenuProps) {
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col bg-secondary px-8 py-4 md:hidden">
+    <div className="fixed inset-0 z-[200] flex flex-col bg-dragonPurple px-8 py-4 md:hidden">
       <div className="flex items-center justify-between">
         <Image
           src={"/images/logo/status-network.svg"}
