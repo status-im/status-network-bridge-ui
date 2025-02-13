@@ -1,9 +1,9 @@
 .MenuItem {
-    background: linear-gradient(to right, transparent 60%, var(--background-color) 100%) left;
-    background-size: 200%;
-    transition: .2s ease-out;
+    transition: 0.2s;
 }
 
 .MenuItem:hover {
-    background-position: right;
+    background-color: rgba(255,255,255, 0.2);
+    border-radius: 16px 0 0 16px;
+    padding-left: 8px;
 }
