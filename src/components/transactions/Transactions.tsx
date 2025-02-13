@@ -94,7 +94,7 @@ export function Transactions() {
   }
 
   return (
-    <div className="flex flex-col gap-8 rounded-lg bg-cardBg p-4">
+    <div className="flex flex-col gap-8 rounded-[32px] bg-cardBg p-4">
       <RefreshHistoryButton fetchHistory={fetchHistory} isLoading={isLoading} />
       {Object.keys(groupedTransactions).map((date) => (
         <TransactionGroup key={`transaction-group-${date}`} date={date} transactions={groupedTransactions[date]} />

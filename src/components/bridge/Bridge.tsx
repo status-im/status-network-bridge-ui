@@ -131,7 +131,7 @@ const Bridge = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="min-w-min max-w-lg rounded-lg bg-cardBg p-6 shadow-lg sm:p-4">
+        <div className="min-w-min max-w-lg rounded-[32px] bg-cardBg p-6 shadow-lg sm:p-4">
           <div
             className={cn({
               "opacity-40 pointer-events-none": !isConnected,
