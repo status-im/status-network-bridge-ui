@@ -33,7 +33,7 @@ const config: Config = {
         success: "#C1FF14",
       },
       fontFamily: {
-        openSans: ["var(--font-open-sans)"]
+        inter: ["var(--font-inter)"]
       },
     },
   },
