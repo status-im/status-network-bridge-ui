@@ -61,6 +61,11 @@ pipeline {
               string(
                 credentialsId: 'bridge-status-network-l2-mainnet-rpc',
                 variable: 'NEXT_PUBLIC_L2_MAINNET_RPC_URL',
+              ),
+              usernamePassword(
+                credentialsId: 'eth-rpc-proxy',
+                usernameVariable: 'NEXT_PUBLIC_ETH_RPC_PROXY_USER',
+                passwordVariable: 'NEXT_PUBLIC_ETH_RPC_PROXY_PASS'
               )
           ]) {
             image = docker.build(
@@ -69,7 +74,8 @@ pipeline {
                   --build-arg NEXT_PUBLIC_L1_TESTNET_RPC_URL='${env.NEXT_PUBLIC_L1_TESTNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L1_MAINNET_RPC_URL='${env.NEXT_PUBLIC_L1_MAINNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L2_TESTNET_RPC_URL='${env.NEXT_PUBLIC_L2_TESTNET_RPC_URL}' \
-                  --build-arg NEXT_PUBLIC_L2_MAINNET_RPC_URL='${env.NEXT_PUBLIC_L2_MAINNET_RPC_URL}' \
+                  --build-arg NEXT_PUBLIC_ETH_RPC_PROXY_USER='${env.NEXT_PUBLIC_ETH_RPC_PROXY_USER}' \
+                  --build-arg NEXT_PUBLIC_ETH_RPC_PROXY_PASS='${env.NEXT_PUBLIC_ETH_RPC_PROXY_PASS}' \
               ."""
             )
           }
