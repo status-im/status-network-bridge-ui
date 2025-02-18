@@ -64,7 +64,7 @@ const statusSepolia = defineChain({
   },
   rpcUrls: {
     default: {
-      http: [process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL]
+      http: ["https://public.sepolia.rpc.status.network"]
     }
   },
   blockExplorers: {
