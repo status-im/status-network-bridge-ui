@@ -1,5 +1,6 @@
 import { Address } from "viem";
 import { configSchema } from "./config.schema";
+import Joi from "joi";
 
 export enum NetworkType {
   UNKNOWN = "UNKNOWN",
@@ -41,6 +42,7 @@ interface LayerConfig {
   tokenBridgeAddress: Address;
   usdcBridgeAddress: Address;
   defaultRPC: string;
+  isAuthenticatedRPC: boolean;
 }
 
 interface NetworkConfig {
@@ -102,7 +104,8 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_MAINNET_L1_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_MAINNET_L1_USDC_BRIDGE as Address)
           : ({} as Address),
-        defaultRPC: process.env.NEXT_PUBLIC_L1_MAINNET_RPC_URL
+        defaultRPC: process.env.NEXT_PUBLIC_L1_MAINNET_RPC_URL,
+        isAuthenticatedRPC: process.env.NEXT_PUBLIC_L1_MAINNET_RPC_IS_AUTHENTICATED === "true"
       },
       L2: {
         name: "Status",
@@ -117,7 +120,8 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_MAINNET_LINEA_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_MAINNET_LINEA_USDC_BRIDGE as Address)
           : ({} as Address),
-        defaultRPC: process.env.NEXT_PUBLIC_L2_MAINNET_RPC_URL
+        defaultRPC: process.env.NEXT_PUBLIC_L2_MAINNET_RPC_URL,
+        isAuthenticatedRPC: process.env.NEXT_PUBLIC_L2_MAINNET_RPC_IS_AUTHENTICATED === "true"
       },
       gasEstimated: process.env.NEXT_PUBLIC_MAINNET_GAS_ESTIMATED
         ? BigInt(process.env.NEXT_PUBLIC_MAINNET_GAS_ESTIMATED)
@@ -143,7 +147,8 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_SEPOLIA_L1_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_SEPOLIA_L1_USDC_BRIDGE as Address)
           : ({} as Address),
-        defaultRPC: process.env.NEXT_PUBLIC_L1_TESTNET_RPC_URL
+        defaultRPC: process.env.NEXT_PUBLIC_L1_TESTNET_RPC_URL,
+        isAuthenticatedRPC: process.env.NEXT_PUBLIC_L1_TESTNET_RPC_IS_AUTHENTICATED === "true"
       },
       L2: {
         name: "Status Sepolia",
@@ -158,7 +163,8 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_SEPOLIA_LINEA_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_SEPOLIA_LINEA_USDC_BRIDGE as Address)
           : ({} as Address),
-        defaultRPC: process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL
+        defaultRPC: process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL,
+        isAuthenticatedRPC: process.env.NEXT_PUBLIC_L2_TESTNET_RPC_IS_AUTHENTICATED === "true"
       },
       gasEstimated: process.env.NEXT_PUBLIC_SEPOLIA_GAS_ESTIMATED
         ? BigInt(process.env.NEXT_PUBLIC_SEPOLIA_GAS_ESTIMATED)
@@ -184,7 +190,8 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_DEVNET_L1_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_DEVNET_L1_USDC_BRIDGE as Address)
           : ({} as Address),
-        defaultRPC: process.env.NEXT_PUBLIC_L1_DEVNET_RPC_URL
+        defaultRPC: process.env.NEXT_PUBLIC_L1_DEVNET_RPC_URL,
+        isAuthenticatedRPC: process.env.NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED === "true",
       },
       L2: {
         name: "Status Dev",
@@ -199,7 +206,8 @@ export const config: Config = {
         usdcBridgeAddress: process.env.NEXT_PUBLIC_DEVNET_LINEA_USDC_BRIDGE
           ? (process.env.NEXT_PUBLIC_DEVNET_LINEA_USDC_BRIDGE as Address)
           : ({} as Address),
-        defaultRPC: process.env.NEXT_PUBLIC_L2_DEVNET_RPC_URL
+        defaultRPC: process.env.NEXT_PUBLIC_L2_DEVNET_RPC_URL,
+        isAuthenticatedRPC: process.env.NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED === "true",
       },
       gasEstimated: process.env.NEXT_PUBLIC_DEVNET_GAS_ESTIMATED
         ? BigInt(process.env.NEXT_PUBLIC_DEVNET_GAS_ESTIMATED)
