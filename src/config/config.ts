@@ -1,6 +1,5 @@
 import { Address } from "viem";
 import { configSchema } from "./config.schema";
-import Joi from "joi";
 
 export enum NetworkType {
   UNKNOWN = "UNKNOWN",
