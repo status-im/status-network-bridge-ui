@@ -1,21 +1,35 @@
 import { http } from "@wagmi/core";
 import { config } from "./config";
 import { chains } from "./wagmiChains"
-import {availableChainIds, CHAIN_ID_TO_DEFAULT_RPC} from "@/utils/constants";
+import {availableChainIds, CHAIN_ID_TO_RPC} from "@/utils/constants";
 import {Transport} from "viem";
 import {WagmiAdapter} from "@reown/appkit-adapter-wagmi";
+import {isChainRPCAuthenticated} from "@/utils/chainsUtil";
+import {generateRPCBasicAuthToken} from "@/utils/auth";
 
 if (!config.walletConnectId) throw new Error("Project ID is not defined");
+
+const generateTransportHeader = (chainId: number) => {
+  if (isChainRPCAuthenticated(chainId)) {
+    return {
+      "Authorization": `Basic ${generateRPCBasicAuthToken()}`
+    }
+  }
+}
 
 const getTransports = () => {
   const ts: Record<number, Transport> = {};
   availableChainIds.forEach(chainId => {
-    ts[chainId] = http(CHAIN_ID_TO_DEFAULT_RPC[chainId], { batch: true })
+    ts[chainId] = http(CHAIN_ID_TO_RPC[chainId], {
+      batch: true,
+      fetchOptions: {
+        headers: generateTransportHeader(chainId)
+      }
+    })
   })
 
   return ts;
 }
-const transports = getTransports()
 
 export const wagmiAdapter = new WagmiAdapter({
   networks: chains,
@@ -25,7 +39,7 @@ export const wagmiAdapter = new WagmiAdapter({
   batch: {
     multicall: true,
   },
-  transports
+  transports: getTransports()
 });
 
 export const wagmiConfig = wagmiAdapter.wagmiConfig;
