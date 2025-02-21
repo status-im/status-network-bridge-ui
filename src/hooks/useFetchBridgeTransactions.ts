@@ -129,13 +129,13 @@ const useFetchBridgeTransactions = () => {
       return;
     }
 
-    const [ethHistory, erc20History, usdcHistory] = await Promise.all([
+    const [ethHistory, erc20History/*, usdcHistory*/] = await Promise.all([
       fetchETHTransactions(client, fromChain, toChain, fromBlock, networkType, networkLayer, transactions),
       fetchERC20Transactions(client, fromChain, toChain, fromBlock, networkType, networkLayer, transactions),
-      fetchUSDCTransactions(client, fromChain, toChain, fromBlock, networkType, networkLayer, transactions),
+      // fetchUSDCTransactions(client, fromChain, toChain, fromBlock, networkType, networkLayer, transactions),
     ]);
 
-    return [...ethHistory, ...erc20History, ...usdcHistory];
+    return [...ethHistory, ...erc20History];
   };
 
   const fetchETHTransactions = async (
