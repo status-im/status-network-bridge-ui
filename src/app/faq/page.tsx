@@ -90,7 +90,7 @@ export default function FaqPage() {
             claim or will be in your wallet (depending on the claiming method you chose). If the transaction is missing,
             or it has been confirmed and you still don&pos;t see your tokens, contact support by heading to our moderated{" "}
             <Link
-                href=""
+                href="https://t.me/statusl2"
                 rel="noopener noreferrer"
                 passHref
                 target="_blank"
@@ -129,7 +129,7 @@ export default function FaqPage() {
           <p>
             You can get advice and support on our moderated{" "}
             <Link
-              href=""
+              href="https://t.me/statusl2"
               rel="noopener noreferrer"
               passHref
               target="_blank"
