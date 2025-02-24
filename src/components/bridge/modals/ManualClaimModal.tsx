@@ -23,7 +23,7 @@ const ManualClaimModal: React.FC<ManualClaimModalProps> = ({ handleNoClose, hand
             No
           </Button>
           <Link
-            href="https://docs.linea.build/developers/guides/bridge/how-to-bridge-eth"
+            href="https://docs.status.network/general-info/bridge/bridging-testnet"
             rel="noopener noreferrer"
             target="_blank"
             className="hover:border-b-1 border-b-1 btn btn-ghost btn-sm rounded-none border-b-primary p-0 font-normal hover:border-b-primary hover:bg-transparent"
