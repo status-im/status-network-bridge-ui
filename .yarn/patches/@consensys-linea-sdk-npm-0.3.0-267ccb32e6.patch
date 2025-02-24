@@ -58,23 +58,23 @@ index 0000000000000000000000000000000000000000..24643cc37449b4bde54411a80b8ed612
 \ No newline at end of file
 diff --git a/.idea/workspace.xml b/.idea/workspace.xml
 new file mode 100644
-index 0000000000000000000000000000000000000000..eac9a852f59ea193f91b987ce42b093044466c14
+index 0000000000000000000000000000000000000000..7f9ce9fa4448faebe270ff11ac872bc5cc94f4a1
 --- /dev/null
 +++ b/.idea/workspace.xml
 @@ -0,0 +1,51 @@
 +<?xml version="1.0" encoding="UTF-8"?>
 +<project version="4">
 +  <component name="ChangeListManager">
-+    <list default="true" id="26a6ffff-4643-470e-a028-cfe762c86c78" name="Changes" comment="" />
++    <list default="true" id="23272bf3-4e84-4cae-843b-d10b60412f74" name="Changes" comment="" />
 +    <option name="SHOW_DIALOG" value="false" />
 +    <option name="HIGHLIGHT_CONFLICTS" value="true" />
 +    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
 +    <option name="LAST_RESOLUTION" value="IGNORE" />
 +  </component>
 +  <component name="ProjectColorInfo"><![CDATA[{
-+  "associatedIndex": 8
++  "associatedIndex": 5
 +}]]></component>
-+  <component name="ProjectId" id="2sP4UR2jKKTQrecbsmVHevGi9wC" />
++  <component name="ProjectId" id="2tLUgcRN0DjzNZp78XstgSpjXNu" />
 +  <component name="ProjectViewState">
 +    <option name="hideEmptyMiddlePackages" value="true" />
 +    <option name="showLibraryContents" value="true" />
@@ -82,7 +82,7 @@ index 0000000000000000000000000000000000000000..eac9a852f59ea193f91b987ce42b0930
 +  <component name="PropertiesComponent"><![CDATA[{
 +  "keyToString": {
 +    "RunOnceActivity.ShowReadmeOnStart": "true",
-+    "last_opened_file_path": "/private/var/folders/0h/pnj87fv1461bv0ms_kzz6rs40000gn/T/xfs-1b0e6ad5/user",
++    "last_opened_file_path": "/private/var/folders/0h/pnj87fv1461bv0ms_kzz6rs40000gn/T/xfs-5c11ffd3/user",
 +    "node.js.detected.package.eslint": "true",
 +    "node.js.selected.package.eslint": "(autodetect)",
 +    "nodejs_package_manager_path": "npm",
@@ -100,12 +100,12 @@ index 0000000000000000000000000000000000000000..eac9a852f59ea193f91b987ce42b0930
 +  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
 +  <component name="TaskManager">
 +    <task active="true" id="Default" summary="Default task">
-+      <changelist id="26a6ffff-4643-470e-a028-cfe762c86c78" name="Changes" comment="" />
-+      <created>1738343890816</created>
++      <changelist id="23272bf3-4e84-4cae-843b-d10b60412f74" name="Changes" comment="" />
++      <created>1740130960240</created>
 +      <option name="number" value="Default" />
 +      <option name="presentableId" value="Default" />
-+      <updated>1738343890816</updated>
-+      <workItem from="1738343891874" duration="44000" />
++      <updated>1740130960240</updated>
++      <workItem from="1740130961299" duration="252000" />
 +    </task>
 +    <servers />
 +  </component>
@@ -114,6 +114,48 @@ index 0000000000000000000000000000000000000000..eac9a852f59ea193f91b987ce42b0930
 +  </component>
 +</project>
 \ No newline at end of file
+diff --git a/dist/lib/sdk/LineaSDK.js b/dist/lib/sdk/LineaSDK.js
+index 24050c97dfc5751c7261908bc2f35c9f16557282..9ff570df09437a6af706cdf14ad4db173777e36a 100644
+--- a/dist/lib/sdk/LineaSDK.js
++++ b/dist/lib/sdk/LineaSDK.js
+@@ -21,8 +21,8 @@ class LineaSDK {
+             this.maxFeePerGas = options.feeEstimatorOptions?.maxFeePerGas;
+             this.gasFeeEstimationPercentile = options.feeEstimatorOptions?.gasFeeEstimationPercentile;
+         }
+-        this.l1Provider = new ProviderService_1.default(options.l1RpcUrl);
+-        this.l2Provider = new ProviderService_1.default(options.l2RpcUrl);
++        this.l1Provider = new ProviderService_1.default(options.l1RpcUrl, options.l1Rpc);
++        this.l2Provider = new ProviderService_1.default(options.l2RpcUrl, options.l2Rpc);
+     }
+     getL1Contract(localL1ContractAddress, localL2ContractAddress) {
+         let l1ContractAddress;
+diff --git a/dist/lib/sdk/ProviderService.d.ts b/dist/lib/sdk/ProviderService.d.ts
+index d4acc1c6f13034b946850571e152e9400cd32b25..57cf9d8a09f772c97ae3d473113066a6c77a8f8d 100644
+--- a/dist/lib/sdk/ProviderService.d.ts
++++ b/dist/lib/sdk/ProviderService.d.ts
+@@ -1,6 +1,6 @@
+ import { ethers, JsonRpcProvider } from "ethers";
+ export default class ProviderService {
+     provider: JsonRpcProvider;
+-    constructor(rpcUrl: string);
++    constructor(rpcUrl: string, jsonRpcProvider?: JsonRpcProvider);
+     getSigner(privateKey: string): ethers.Signer;
+ }
+diff --git a/dist/lib/sdk/ProviderService.js b/dist/lib/sdk/ProviderService.js
+index d534b5595aa8b17b7542b64baae9dbce143cef14..e11d7a20911664c1bdb05301773eb1ef9ebf5aa8 100644
+--- a/dist/lib/sdk/ProviderService.js
++++ b/dist/lib/sdk/ProviderService.js
+@@ -2,8 +2,8 @@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ const ethers_1 = require("ethers");
+ class ProviderService {
+-    constructor(rpcUrl) {
+-        this.provider = new ethers_1.JsonRpcProvider(rpcUrl);
++    constructor(rpcUrl, jsonRpcProvider) {
++        this.provider = jsonRpcProvider ? jsonRpcProvider : new ethers_1.JsonRpcProvider(rpcUrl);
+     }
+     getSigner(privateKey) {
+         try {
 diff --git a/dist/lib/sdk/claiming/L1ClaimingService.js b/dist/lib/sdk/claiming/L1ClaimingService.js
 index 4c8d672b6eec2acb9ca9dd6af04ac3312e497043..93e258977ea8d2f43ff70462e66cd6f0c4a3fcc6 100644
 --- a/dist/lib/sdk/claiming/L1ClaimingService.js
@@ -127,3 +169,22 @@ index 4c8d672b6eec2acb9ca9dd6af04ac3312e497043..93e258977ea8d2f43ff70462e66cd6f0
          const migrationBlock = await this.findMigrationBlock();
          if (!migrationBlock) {
              return false;
+diff --git a/dist/lib/utils/types.d.ts b/dist/lib/utils/types.d.ts
+index 522bd36c36ec6af5fdfae9baafa20f911567fabe..c9174cc86f2fcbedd2460e8e2e8a4f8cd3f01b24 100644
+--- a/dist/lib/utils/types.d.ts
++++ b/dist/lib/utils/types.d.ts
+@@ -1,4 +1,5 @@
+ import { TypedEventLog } from "../../typechain/common";
++import { JsonRpcProvider } from "ethers";
+ export type Message = {
+     messageSender: string;
+     destination: string;
+@@ -19,6 +20,8 @@ interface BaseOptions {
+     readonly network: Network;
+     readonly l1RpcUrl: string;
+     readonly l2RpcUrl: string;
++    readonly l1Rpc?: JsonRpcProvider;
++    readonly l2Rpc?: JsonRpcProvider;
+     readonly mode: SDKMode;
+     readonly l2MessageTreeDepth?: number;
+ }

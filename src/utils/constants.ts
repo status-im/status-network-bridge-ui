@@ -24,7 +24,7 @@ export const MENU_ITEMS = [
     Icon: DocsIcon,
   },
   {
-    title: "FaQ",
+    title: "FAQ",
     href: "/faq",
     external: false,
     Icon: FaqIcon,
@@ -49,7 +49,7 @@ export const SUPPORTED_NETWORK_TO_CHAIN_ID: Record<ESupportedNetworks, number> =
   [ESupportedNetworks.DEV_L2]: 1337
 }
 
-export const CHAIN_ID_TO_DEFAULT_RPC: Record<number, string> = {
+export const CHAIN_ID_TO_RPC: Record<number, string> = {
   [SUPPORTED_NETWORK_TO_CHAIN_ID.ETH_SEPOLIA]: process.env.NEXT_PUBLIC_L1_TESTNET_RPC_URL,
   [SUPPORTED_NETWORK_TO_CHAIN_ID.ETH_MAINNET]: "", //@TODO
   [SUPPORTED_NETWORK_TO_CHAIN_ID.STATUS_SEPOLIA]: process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL,

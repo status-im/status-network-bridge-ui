@@ -1339,7 +1339,7 @@ __metadata:
 
 "@consensys/linea-sdk@patch:@consensys/linea-sdk@npm%3A0.3.0#~/.yarn/patches/@consensys-linea-sdk-npm-0.3.0-267ccb32e6.patch":
   version: 0.3.0
-  resolution: "@consensys/linea-sdk@patch:@consensys/linea-sdk@npm%3A0.3.0#~/.yarn/patches/@consensys-linea-sdk-npm-0.3.0-267ccb32e6.patch::version=0.3.0&hash=cd6ecc"
+  resolution: "@consensys/linea-sdk@patch:@consensys/linea-sdk@npm%3A0.3.0#~/.yarn/patches/@consensys-linea-sdk-npm-0.3.0-267ccb32e6.patch::version=0.3.0&hash=cf1cc3"
   dependencies:
     better-sqlite3: "npm:^9.4.3"
     class-validator: "npm:^0.14.1"
@@ -1350,7 +1350,7 @@ __metadata:
     typeorm: "npm:^0.3.20"
     typeorm-naming-strategies: "npm:^4.1.0"
     winston: "npm:^3.12.0"
-  checksum: 10c0/2b4ce223e34ae146f2cb9b1d39396ed326dc9a71984d2743de047e4d95b79a620803c136364ba997d7a90f323bda3c53956c2e620e0809c400117109a055d0e2
+  checksum: 10c0/4ec907b851edd856fde89657bfdd8d36704a53a82ce5cfa303cd5092b48790db99c12b5d15767450c60c6e11eb63d44326413669f3f63edaf09072458b807e1f
   languageName: node
   linkType: hard
 
