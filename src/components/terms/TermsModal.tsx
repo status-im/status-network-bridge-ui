@@ -32,7 +32,6 @@ export default function TermsModal() {
     return null;
   }
 
-  // @TODO Update terms here
   return (
     <div
       ref={termsModalRef}
@@ -46,7 +45,7 @@ export default function TermsModal() {
       <div className="mb-2 text-xs font-normal leading-relaxed">
         I understand and agree to comply with the Status Network Testnet Terms and Conditions in connection with my participation in the Status Network Testnet Programme.
         <br/>
-        <Link href="https://status.network/terms-of-service" target="_blank" className="ml-1 font-extrabold">
+        <Link href="https://docs.status.network/terms-of-use" target="_blank" className="ml-1 font-extrabold">
           (Terms of Service | Status Network )
         </Link>{" "}
       </div>
