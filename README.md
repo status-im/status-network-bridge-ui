@@ -1,11 +1,11 @@
-# Status Network Bridge 🐉
+# Status Network Bridge
 
 ![Status Network Bridge - App - banner](./github/assets/hero.png)  
 Status Network Bridge is a bridge solution, providing secure and efficient cross-chain transactions between Layer 1 and Status Network,
 The first Ethereum L2 with gas-free transactions at scale
 
-## Running the project ⊂(◉‿◉)つ
-### Requirements (︶︹︶)
+## Running the project 🐉
+### Requirements ✅
 To run the project, you'll need:
 - If setting up using **[Docker](https://www.docker.com)**:
     - Installed Docker
@@ -14,7 +14,7 @@ To run the project, you'll need:
     - [Node.js](https://nodejs.org/en/) (Version 18)
     - [Yarn](https://yarnpkg.com/)
 
-### Installation ███▒▒▒▒▒▒▒
+### Installation 🧙
 #### Git
 1. Clone the repo: ```git clone https://github.com/status-im/status-network-bridge-ui.git```
 2. Navigate to the folder: ```cd status-network-bridge-ui```
@@ -22,7 +22,7 @@ To run the project, you'll need:
 #### Installing the dependencies
 3. Run ```yarn``` to install the dependencies
 
-### Commands ¯\(°_o)/¯
+### Commands 💻
 | Name                | Command          | Description                                |
 |---------------------|------------------|--------------------------------------------|
 | Build               | ```yarn build``` | Builds all the packages inside the project |
@@ -30,7 +30,7 @@ To run the project, you'll need:
 | Running Development | ```yarn dev```   | Runs the project in development mode       |
 | Running Production  | ```yarn start``` | Runs the project from production build     |
 
-### Running the project ─=≡Σ((( つ◕ل͜◕)つ
+### Running the project 🏁
 To run the server, follow next steps:
 
 **Step 1:** Create the .env file  
@@ -60,7 +60,7 @@ Where can I obtain the needed values?
 **Step 4:** Enjoy! ٩(^‿^)۶
 
 <br/>
-<img align="left" alt="sn-team" width="100" height="100" src="./github/assets/sn-team.png">
+<img align="left" alt="sn-team" width="100" height="100" src="./.github/assets/sn-team.png">
 
 ### Made with ❤
 by [status.network](https://status.network/) team
