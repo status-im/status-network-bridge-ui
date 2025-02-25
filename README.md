@@ -1,6 +1,6 @@
 # Status Network Bridge
 
-![Status Network Bridge - App - banner](./github/assets/hero.png)  
+![Status Network Bridge - App - banner](./.github/assets/hero.png)  
 Status Network Bridge is a bridge solution, providing secure and efficient cross-chain transactions between Layer 1 and Status Network,
 The first Ethereum L2 with gas-free transactions at scale
 
