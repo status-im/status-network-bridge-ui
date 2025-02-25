@@ -4,7 +4,7 @@
 Status Network Bridge is a bridge solution, providing secure and efficient cross-chain transactions between Layer 1 and Status Network,
 The first Ethereum L2 with gas-free transactions at scale
 
-## Running the project 🐉
+## How to run the project? 🐉
 ### Requirements ✅
 To run the project, you'll need:
 - If setting up using **[Docker](https://www.docker.com)**:
@@ -30,7 +30,7 @@ To run the project, you'll need:
 | Running Development | ```yarn dev```   | Runs the project in development mode       |
 | Running Production  | ```yarn start``` | Runs the project from production build     |
 
-### Running the project 🏁
+### Running the commands 🏁
 To run the server, follow next steps:
 
 **Step 1:** Create the .env file  
