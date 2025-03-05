@@ -19,17 +19,22 @@ const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-theme="dark">
-      <title>{metadata.title?.toString()}</title>
-      <meta name="description" content={metadata.description?.toString()} key="desc" />
+    <title>{metadata.title?.toString()}</title>
+    <meta name="description" content={metadata.description?.toString()} key="desc"/>
+    <meta property="og:image" content="images/social-card.jpeg"/>
+    <meta property="og:image:alt" content="Preview Image for Status Network Bridge"/>
+    <meta property="og:image:type" content="image/jpeg"/>
+    <meta property="og:image:width" content="1280"/>
+    <meta property="og:image:height" content="720"/>
 
-      <body className={cn(interFont.variable, interFont.className)}>
+    <body className={cn(interFont.variable, interFont.className)}>
 
-        <Providers>
-          <Layout>{children}</Layout>
-        </Providers>
-      </body>
+    <Providers>
+      <Layout>{children}</Layout>
+    </Providers>
+    </body>
 
-      <Fathom/>
+    <Fathom/>
     </html>
   );
 }
