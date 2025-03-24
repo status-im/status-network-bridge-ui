@@ -45,6 +45,14 @@ body {
     padding: 0;
   }
 
+  .menu li > *:not(ul):not(.menu-title):not(details):active{
+    @apply bg-transparent;
+  }
+
+  .menu li > details > summary:active {
+    @apply bg-primary;
+  }
+
   :where(.menu-horizontal > li:not(.menu-title) > details > ul) {
     border-radius: 0;
   }
