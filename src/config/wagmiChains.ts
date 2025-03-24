@@ -1,6 +1,5 @@
-import { lineaSepolia, sepolia } from "@wagmi/core/chains";
+import { sepolia, statusSepolia } from "@wagmi/core/chains";
 import { defineChain } from "viem";
-import {ESupportedNetworks, SUPPORTED_NETWORK_TO_CHAIN_ID} from "@/utils/constants";
 import { AppKitNetwork } from "@reown/appkit/networks";
 
 const devL1 = defineChain({
@@ -29,7 +28,7 @@ const devL1 = defineChain({
 })
 
 const devL2 = defineChain({
-  ...lineaSepolia,
+  ...statusSepolia,
   id: 1337,
   name: "Dev L2",
   nativeCurrency: {
@@ -47,31 +46,6 @@ const devL2 = defineChain({
       name: 'Blockscout',
       url: 'http://localhost:1234',
       apiUrl: 'http://localhost:1234/api'
-    }
-  },
-  contracts: {
-  },
-  testnet: true,
-})
-
-const statusSepolia = defineChain({
-  id: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.STATUS_SEPOLIA],
-  name: "Status Network Sepolia",
-  nativeCurrency: {
-    name: "Status Sepolia Ether",
-    symbol: "ETH",
-    decimals: 18
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://public.sepolia.rpc.status.network"]
-    }
-  },
-  blockExplorers: {
-    default: {
-      name: 'Blockscout',
-      url: 'https://sepoliascan.status.network/',
-      apiUrl: 'https://sepoliascan.status.network/api'
     }
   },
   contracts: {
