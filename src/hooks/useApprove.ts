@@ -51,15 +51,19 @@ const useApprove = () => {
       }
 
       try {
-        const { request } = await simulateContract(wagmiConfig, {
-          address: tokenAddress,
-          abi: ERC20Abi,
-          functionName: "approve",
-          args: [spender, amount],
-        });
+        if (token.isMime) {
+          console.log("mime token!")
+        } else {
+          const { request } = await simulateContract(wagmiConfig, {
+            address: tokenAddress,
+            abi: ERC20Abi,
+            functionName: "approve",
+            args: [spender, amount],
+          });
 
-        const hash = await writeContract(wagmiConfig, request);
-        setHash(hash);
+          const hash = await writeContract(wagmiConfig, request);
+          setHash(hash);
+        }
       } catch (error) {
         log.error(error);
         setError(error as Error);

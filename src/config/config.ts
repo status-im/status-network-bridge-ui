@@ -25,6 +25,7 @@ export interface TokenInfo {
   UNKNOWN: Address | null;
   image: string;
   isDefault: boolean;
+  isMime?: boolean;
 }
 
 export enum TokenType {

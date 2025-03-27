@@ -5,6 +5,7 @@ import { sepolia, linea, mainnet, lineaSepolia, Chain } from "viem/chains";
 import { NetworkTokens, NetworkType, TokenInfo, TokenType, wagmiConfig } from "@/config";
 import { Token } from "@/models/token";
 import { defaultTokensConfig } from "@/stores/tokenStore";
+import {isMimeToken} from "@/utils/mime";
 
 interface CoinGeckoToken {
   id: string;
@@ -125,6 +126,7 @@ export async function fetchTokenInfo(
       type: TokenType.ERC20,
       UNKNOWN: null,
       isDefault: false,
+      isMime: isMimeToken(erc20.address, erc20.symbol!)
     };
   } catch (err) {
     log.error(err);
@@ -197,6 +199,7 @@ export async function formatToken(token: Token): Promise<TokenInfo> {
     UNKNOWN: null,
     image: logoURI,
     isDefault: true,
+    isMime: isMimeToken(token.address, token.symbol)
   };
 }
 
