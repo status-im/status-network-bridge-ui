@@ -3,6 +3,7 @@ import { formatEther, parseEther, parseUnits } from "viem";
 import { TokenType } from "@/config";
 import { useGasEstimation, useApprove, useMinimumFee, useExecutionFee } from "@/hooks";
 import { useChainStore } from "@/stores/chainStore";
+import { isMimeToken} from "@/utils/mime";
 
 type UseReceivedAmountProps = {
   amount: string;
@@ -43,7 +44,14 @@ export function useReceivedAmount({ amount, enoughAllowance, claim }: UseReceive
       if (enoughAllowance) {
         calculatedGasFee = (await estimateGasBridge(amount, minimumFee)) || 0n;
       } else {
-        calculatedGasFee = (await estimateApprove(parseUnits(amount, token.decimals), tokenBridgeAddress)) || 0n;
+        let amountBigInt = parseUnits(amount, token.decimals);
+        if (isMimeToken(token[networkLayer])) {
+          // There's a chance that different amount will throw error,
+          // for estimation purposes it doesn't matter too much for number to be exact.
+          // Gas will differ slightly, but inconsiderably
+          amountBigInt = 0n;
+        }
+        calculatedGasFee = (await estimateApprove(amountBigInt, tokenBridgeAddress)) || 0n;
       }
 
       setEstimatedGasFee(calculatedGasFee);

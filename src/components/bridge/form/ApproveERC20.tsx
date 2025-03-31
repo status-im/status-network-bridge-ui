@@ -9,6 +9,7 @@ import { useSwitchNetwork, useAllowance, useApprove } from "@/hooks";
 import { Transaction } from "@/models";
 import { useChainStore } from "@/stores/chainStore";
 import { cn } from "@/utils/cn";
+import {isMimeAllowanceResetNeeded, isMimeToken} from "@/utils/mime";
 
 export type BridgeForm = {
   amount: string;
@@ -25,6 +26,7 @@ export default function Approve() {
 
   // Context
   const token = useChainStore((state) => state.token);
+  const layer = useChainStore((state) => state.networkLayer);
   const fromChain = useChainStore((state) => state.fromChain);
   const tokenBridgeAddress = useChainStore((state) => state.tokenBridgeAddress);
 
@@ -103,10 +105,8 @@ export default function Approve() {
       let amountToApprove = amountBigInt;
 
       if (allowance && allowance > 0n) {
-        if (allowance >= amountBigInt) {
-          amountToApprove = allowance - amountBigInt;
-        } else {
-          amountToApprove = amountBigInt - allowance;
+        if (isMimeToken(token[layer]) && isMimeAllowanceResetNeeded(allowance, amountBigInt)) {
+          amountToApprove = 0n;
         }
       }
 

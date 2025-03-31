@@ -36,7 +36,7 @@ const useApprove = () => {
     async (amount: bigint, spender: Address | null) => {
       setError(null);
       setIsLoading(true);
-      if (!amount) {
+      if (amount === undefined || amount === null) {
         setIsLoading(false);
         return;
       }
