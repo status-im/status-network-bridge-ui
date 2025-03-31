@@ -12,6 +12,10 @@
   --sky-blue: #3D96A5
 }
 
+html {
+  overflow-x:hidden;
+}
+
 body {
   background:
           radial-gradient(circle at 0% 100%, #FBFBFB 0%, transparent 50%),

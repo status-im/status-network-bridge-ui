@@ -31,7 +31,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="md:ml-64">
         <Header />
       </div>
-      <main className="m-0 flex-1 p-3 md:ml-64 md:p-10">{children}</main>
+      <main className="m-0 flex-1 p-3 md:ml-64 md:p-10 items-center flex flex-col">{children}</main>
     </div>
   );
 }
