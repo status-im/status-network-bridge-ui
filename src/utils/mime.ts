@@ -1,7 +1,7 @@
 import {Address} from "viem";
 
 export function isMimeAllowanceResetNeeded(allowedAmount: bigint, requestedAmount: bigint) {
-  if (allowedAmount === 0n || allowedAmount === requestedAmount) {
+  if (allowedAmount === 0n || allowedAmount >= requestedAmount) {
     return false;
   }
 
