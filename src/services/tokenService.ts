@@ -5,7 +5,6 @@ import { sepolia, linea, mainnet, lineaSepolia, Chain } from "viem/chains";
 import { NetworkTokens, NetworkType, TokenInfo, TokenType, wagmiConfig } from "@/config";
 import { Token } from "@/models/token";
 import { defaultTokensConfig } from "@/stores/tokenStore";
-import {isMimeToken} from "@/utils/mime";
 
 interface CoinGeckoToken {
   id: string;
@@ -125,8 +124,7 @@ export async function fetchTokenInfo(
       image,
       type: TokenType.ERC20,
       UNKNOWN: null,
-      isDefault: false,
-      isMime: isMimeToken(erc20.address, erc20.symbol!)
+      isDefault: false
     };
   } catch (err) {
     log.error(err);
@@ -140,6 +138,10 @@ export async function getTokens(networkTypes: NetworkTypes): Promise<Token[]> {
     let url = process.env.NEXT_PUBLIC_MAINNET_TOKEN_LIST ? (process.env.NEXT_PUBLIC_MAINNET_TOKEN_LIST as string) : "";
     if (networkTypes === NetworkTypes.SEPOLIA) {
       url = process.env.NEXT_PUBLIC_SEPOLIA_TOKEN_LIST ? (process.env.NEXT_PUBLIC_SEPOLIA_TOKEN_LIST as string) : "";
+    }
+
+    if (!url) {
+      return [];
     }
 
     const response = await fetch(url);
@@ -198,8 +200,7 @@ export async function formatToken(token: Token): Promise<TokenInfo> {
     L2: token.address,
     UNKNOWN: null,
     image: logoURI,
-    isDefault: true,
-    isMime: isMimeToken(token.address, token.symbol)
+    isDefault: true
   };
 }
 

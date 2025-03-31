@@ -1,24 +1,25 @@
-import {TokenInfo} from "@/config";
 import {Address} from "viem";
 
-export function isMimeAllowanceResetNeeded(token: TokenInfo) {
-  if (!token) {
+export function isMimeAllowanceResetNeeded(allowedAmount: bigint, requestedAmount: bigint) {
+  if (allowedAmount === 0n || allowedAmount === requestedAmount) {
     return false;
   }
 
-  if (!token.isMime) {
-    return false;
-  }
-
-
+  return true;
 }
 
-// Keep it simple for now, relying purely on metadata and address being correct
-export function isMimeToken(tokenAddress: Address, tokenSymbol: string): boolean {
-  if (tokenSymbol === "STT" && tokenAddress.toLowerCase() === "0x1C3Ac2a186c6149Ae7Cb4D716eBbD0766E4f898a".toLowerCase()) {
-    return true;
-  } else if (tokenSymbol === "SNT" && tokenAddress.toLowerCase() === "0x744d70FDBE2Ba4CF95131626614a1763DF805B9E".toLowerCase()) {
-    return true;
+// Keep it simple for now, validating only if SNT
+export function isMimeToken(tokenAddress?: Address | null): boolean {
+  const statusTestnetAddress = "0xE452027cdEF746c7Cd3DB31CB700428b16cD8E51";
+  const statusMainnetAddress = "0x744d70FDBE2Ba4CF95131626614a1763DF805B9E"
+
+  if (tokenAddress) {
+    const isSTT = tokenAddress.toLowerCase() === statusTestnetAddress.toLowerCase();
+    const isSNT = tokenAddress.toLowerCase() === statusMainnetAddress.toLowerCase();
+
+    if (isSTT || isSNT) {
+      return true;
+    }
   }
 
   return false;

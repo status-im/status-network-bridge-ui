@@ -36,7 +36,7 @@ const useApprove = () => {
     async (amount: bigint, spender: Address | null) => {
       setError(null);
       setIsLoading(true);
-      if (!amount) {
+      if (amount === undefined || amount === null) {
         setIsLoading(false);
         return;
       }
@@ -51,19 +51,15 @@ const useApprove = () => {
       }
 
       try {
-        if (token.isMime) {
-          console.log("mime token!")
-        } else {
-          const { request } = await simulateContract(wagmiConfig, {
-            address: tokenAddress,
-            abi: ERC20Abi,
-            functionName: "approve",
-            args: [spender, amount],
-          });
+        const { request } = await simulateContract(wagmiConfig, {
+          address: tokenAddress,
+          abi: ERC20Abi,
+          functionName: "approve",
+          args: [spender, amount],
+        });
 
-          const hash = await writeContract(wagmiConfig, request);
-          setHash(hash);
-        }
+        const hash = await writeContract(wagmiConfig, request);
+        setHash(hash);
       } catch (error) {
         log.error(error);
         setError(error as Error);
