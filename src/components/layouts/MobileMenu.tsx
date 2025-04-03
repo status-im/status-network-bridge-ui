@@ -13,9 +13,9 @@ export default function MobileMenu({ toggleMenu }: MobileMenuProps) {
     <div className="fixed inset-0 z-[200] flex flex-col bg-dragonPurple px-8 py-4 md:hidden">
       <div className="flex items-center justify-between">
         <Image
-          src={"/images/logo/status-network.svg"}
+          src={"/images/logo/status-network-wrapped.png"}
           alt="Status Network logo"
-          width={0}
+          width={100}
           height={0}
           priority
           style={{ width: "auto", height: "auto" }}
