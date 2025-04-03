@@ -12,7 +12,7 @@
   --sky-blue: #3D96A5
 }
 
-html {
+html, body {
   overflow-x:hidden;
 }
 

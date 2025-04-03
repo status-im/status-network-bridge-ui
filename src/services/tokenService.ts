@@ -1,10 +1,11 @@
 import log from "loglevel";
 import { Address } from "viem";
 import { GetTokenReturnType, getToken } from "@wagmi/core";
-import { sepolia, linea, mainnet, lineaSepolia, Chain } from "viem/chains";
+import { sepolia, mainnet, Chain } from "viem/chains";
 import { NetworkTokens, NetworkType, TokenInfo, TokenType, wagmiConfig } from "@/config";
 import { Token } from "@/models/token";
 import { defaultTokensConfig } from "@/stores/tokenStore";
+import {statusSepolia} from "@wagmi/core/chains";
 
 interface CoinGeckoToken {
   id: string;
@@ -82,7 +83,7 @@ export async function fetchTokenInfo(
   let chainFound;
 
   if (!chainFound) {
-    const chains: Chain[] = networkType === NetworkType.SEPOLIA ? [lineaSepolia, sepolia] : [linea, mainnet];
+    const chains: Chain[] = networkType === NetworkType.SEPOLIA ? [statusSepolia, sepolia] : [];
 
     // Put the fromChain arg at the begining to take it as priority
     if (fromChain) chains.unshift(fromChain);

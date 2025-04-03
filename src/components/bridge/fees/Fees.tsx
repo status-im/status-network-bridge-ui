@@ -71,8 +71,8 @@ export function Fees({ totalReceived, fees: { total, bridgingFeeInWei, transacti
         tooltipClassName="z-[100]"
         tooltip={
           networkLayer === NetworkLayer.L1
-            ? "Linea has a 20 minutes delay on deposits as a security measure."
-            : "Linea has a minimum 8 hour delay on withdrawals as a security measure. Withdrawals can take up to 32 hours to complete"
+            ? "Status Network has a 20 minutes delay on deposits as a security measure."
+            : "Status Network has a minimum 8 hour delay on withdrawals as a security measure. Withdrawals can take up to 32 hours to complete"
         }
       />
       <FeeLine

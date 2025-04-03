@@ -64,7 +64,7 @@ const useBridge = (): UseBridge => {
           name: cause,
           message:
             "The token you have selected is not currently available. Please select another token. For more details see",
-          link: "https://docs.linea.build/use-mainnet/bridges-of-linea",
+          link: "https://docs.status.network/tools/bridge",
           displayInToast: true,
         });
         break;
@@ -72,8 +72,8 @@ const useBridge = (): UseBridge => {
         setError({
           name: cause,
           message:
-            "The message service has reached it's daily withdrawal limit. Please try again in 24 hours. For more details about this security measure see",
-          link: "https://docs.linea.build/use-mainnet/bridges-of-linea",
+            "The message service has reached it's daily withdrawal limit. Please try again in 24 hours.",
+          link: "https://docs.status.network/tools/bridge",
           displayInToast: true,
         });
         break;
