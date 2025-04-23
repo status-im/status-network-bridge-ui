@@ -6,6 +6,7 @@ import interFont from "@/assets/fonts/inter";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import Fathom from "@/components/fathom/Fathom";
+import Umami from "@/components/umami/Umami";
 
 export const metadata: Metadata = {
   title: "Status Network Bridge",
@@ -37,7 +38,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </Providers>
     </body>
 
-    <Fathom/>
+    <Fathom />
+    <Umami />
     </html>
   );
 }
