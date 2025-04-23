@@ -5,7 +5,6 @@ import { cn } from "@/utils/cn";
 import interFont from "@/assets/fonts/inter";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
-import Fathom from "@/components/fathom/Fathom";
 import Umami from "@/components/umami/Umami";
 
 export const metadata: Metadata = {
@@ -38,7 +37,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </Providers>
     </body>
 
-    <Fathom />
     <Umami />
     </html>
   );
