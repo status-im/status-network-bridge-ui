@@ -141,7 +141,7 @@ pipeline {
     stage('Deploy') {
       steps {
         script {
-          withDockerRegistry([credentialsId: 'harbor-status-im-bridge-robot', url: 'https://${DOCKER_REGISTRY}']) {
+          withDockerRegistry([credentialsId: 'harbor-status-im-bridge-robot', url: "https://${DOCKER_REGISTRY}"]) {
             image.push(params.IMAGE_TAG)
           }
         }
