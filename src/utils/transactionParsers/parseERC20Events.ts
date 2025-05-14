@@ -17,6 +17,7 @@ const parseERC20Events = async (
   if (
     networkType !== NetworkType.MAINNET &&
     networkType !== NetworkType.SEPOLIA &&
+    networkType !== NetworkType.DEVNET &&
     networkType !== NetworkType.UNKNOWN
   ) {
     throw new Error("Invalid network type");
@@ -85,6 +86,7 @@ const parseERC20V2Events = async (
   if (
     networkType !== NetworkType.MAINNET &&
     networkType !== NetworkType.SEPOLIA &&
+    networkType !== NetworkType.DEVNET &&
     networkType !== NetworkType.UNKNOWN
   ) {
     throw new Error("Invalid network type");

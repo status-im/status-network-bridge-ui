@@ -1,5 +1,6 @@
 import { Address } from "viem";
 import { configSchema } from "./config.schema";
+import {ESupportedNetworks, SUPPORTED_NETWORK_TO_CHAIN_ID} from "@/utils/constants";
 
 export enum NetworkType {
   UNKNOWN = "UNKNOWN",
@@ -179,7 +180,7 @@ export const config: Config = {
       L1: {
         name: "Sepolia Dev",
         iconPath: "/images/logo/ethereum-rounded.svg",
-        chainId: 31648428,
+        chainId: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L1],
         messageServiceAddress: process.env.NEXT_PUBLIC_SEPOLIA_L1_MESSAGE_SERVICE
           ? (process.env.NEXT_PUBLIC_DEVNET_L1_MESSAGE_SERVICE as Address)
           : ({} as Address),
@@ -195,7 +196,7 @@ export const config: Config = {
       L2: {
         name: "Status Dev",
         iconPath: "/images/logo/sn-sepolia.svg",
-        chainId: 1337,
+        chainId: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L2],
         messageServiceAddress: process.env.NEXT_PUBLIC_DEVNET_LINEA_MESSAGE_SERVICE
           ? (process.env.NEXT_PUBLIC_DEVNET_LINEA_MESSAGE_SERVICE as Address)
           : ({} as Address),
