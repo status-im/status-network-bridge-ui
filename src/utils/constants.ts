@@ -45,8 +45,8 @@ export const SUPPORTED_NETWORK_TO_CHAIN_ID: Record<ESupportedNetworks, number> =
   [ESupportedNetworks.ETH_MAINNET]: 1,
   [ESupportedNetworks.STATUS_SEPOLIA]: 1660990954,
   [ESupportedNetworks.STATUS_MAINNET]: 895616596,
-  [ESupportedNetworks.DEV_L1]: 31648428,
-  [ESupportedNetworks.DEV_L2]: 1337
+  [ESupportedNetworks.DEV_L1]: Number(process.env.NEXT_PUBLIC_L1_DEVNET_CHAIN_ID),
+  [ESupportedNetworks.DEV_L2]: Number(process.env.NEXT_PUBLIC_L2_DEVNET_CHAIN_ID)
 }
 
 export const CHAIN_ID_TO_RPC: Record<number, string> = {

@@ -1,12 +1,13 @@
 import { sepolia, statusSepolia } from "@wagmi/core/chains";
 import { defineChain } from "viem";
 import { AppKitNetwork } from "@reown/appkit/networks";
+import {ESupportedNetworks, SUPPORTED_NETWORK_TO_CHAIN_ID} from "@/utils/constants";
 
 const devL1 = defineChain({
-  id: 31648428,
+    id: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L1],
   name: "Dev L1",
   nativeCurrency: {
-    name: "Sepolia Ether",
+    name: "Devnet Ether",
     symbol: "ETH",
     decimals: 18
   },
@@ -29,10 +30,10 @@ const devL1 = defineChain({
 
 const devL2 = defineChain({
   ...statusSepolia,
-  id: 1337,
+  id: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L2],
   name: "Dev L2",
   nativeCurrency: {
-    name: 'Status Sepolia Ether',
+    name: 'Devnet L2 Ether',
     symbol: 'ETH',
     decimals: 18
   },
