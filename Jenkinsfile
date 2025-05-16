@@ -20,15 +20,10 @@ pipeline {
       description: 'Docker image tag to push.',
       defaultValue: params.IMAGE_TAG ?: 'deploy-develop',
     )
-    string(
-      name: 'NEXT_PUBLIC_L1_DEVNET_RPC_URL',
-      description: 'L1 Devnet RPC URL.',
-      defaultValue: 'http://localhost:8445/',
-    )
-    string(
-      name: 'NEXT_PUBLIC_L2_DEVNET_RPC_URL',
-      description: 'L2 Devnet RPC URL.',
-      defaultValue: 'http://localhost:9045/',
+    booleanParam(
+      name: 'NEXT_PUBLIC_USE_DEVNET',
+      description: 'Flag controlling to use Devnet.',
+      defaultValue: false,
     )
     string(
       name: 'NEXT_PUBLIC_L1_TESTNET_RPC_URL',
@@ -72,16 +67,6 @@ pipeline {
       description: 'Flag controlling if auth header for L2 Testnet will be injected to requests.',
       defaultValue: true,
     )
-    booleanParam(
-      name: 'NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED',
-      description: 'Flag controlling if auth header for L1 Devnet will be injected to requests.',
-      defaultValue: false,
-    )
-    booleanParam(
-      name: 'NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED',
-      description: 'Flag controlling if auth header for L2 Devnet will be injected to requests.',
-      defaultValue: false,
-    )
   }
 
   options {
@@ -108,6 +93,30 @@ pipeline {
                 credentialsId: 'bridge-status-network-wallet-connect-id',
                 variable: 'NEXT_PUBLIC_WALLET_CONNECT_ID',
               ),
+              string(
+                credentialsId: 'bridge-status-network-public-l1-devnet-rpc-is-authenticated',
+                variable: 'NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED',
+              ),
+              string(
+                credentialsId: 'bridge-status-network-public-l2-devnet-rpc-is-authenticated',
+                variable: 'NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED',
+              ),
+              string(
+                credentialsId: 'bridge-status-network-public-l1-devnet-rpc-url',
+                variable: 'NEXT_PUBLIC_L1_DEVNET_RPC_URL',
+              ),
+              string(
+                credentialsId: 'bridge-status-network-public-l2-devnet-rpc-url',
+                variable: 'NEXT_PUBLIC_L2_DEVNET_RPC_URL',
+              ),
+              string(
+                credentialsId: 'bridge-status-network-public-l1-devnet-chain-id',
+                variable: 'NEXT_PUBLIC_L1_DEVNET_CHAIN_ID',
+              ),
+              string(
+                credentialsId: 'bridge-status-network-public-l2-devnet-chain-id',
+                variable: 'NEXT_PUBLIC_L2_DEVNET_CHAIN_ID',
+              ),
               usernamePassword(
                 credentialsId: 'eth-rpc-proxy',
                 usernameVariable: 'NEXT_PUBLIC_ETH_RPC_PROXY_USER',
@@ -117,18 +126,21 @@ pipeline {
             image = docker.build(
               "${DOCKER_REGISTRY}/${IMAGE_NAME}:${GIT_COMMIT.take(8)}",
               """--build-arg NEXT_PUBLIC_WALLET_CONNECT_ID='${env.NEXT_PUBLIC_WALLET_CONNECT_ID}' \
-                  --build-arg NEXT_PUBLIC_L1_DEVNET_RPC_URL='${params.NEXT_PUBLIC_L1_DEVNET_RPC_URL}' \
+                  --build-arg NEXT_PUBLIC_USE_DEVNET='${params.NEXT_PUBLIC_USE_DEVNET}' \
+                  --build-arg NEXT_PUBLIC_L1_DEVNET_CHAIN_ID='${env.NEXT_PUBLIC_L1_DEVNET_CHAIN_ID}' \
+                  --build-arg NEXT_PUBLIC_L1_DEVNET_RPC_URL='${env.NEXT_PUBLIC_L1_DEVNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L1_TESTNET_RPC_URL='${params.NEXT_PUBLIC_L1_TESTNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L1_MAINNET_RPC_URL='${params.NEXT_PUBLIC_L1_MAINNET_RPC_URL}' \
-                  --build-arg NEXT_PUBLIC_L2_DEVNET_RPC_URL='${params.NEXT_PUBLIC_L2_DEVNET_RPC_URL}' \
+                  --build-arg NEXT_PUBLIC_L2_DEVNET_CHAIN_ID='${env.NEXT_PUBLIC_L2_DEVNET_CHAIN_ID}' \
+                  --build-arg NEXT_PUBLIC_L2_DEVNET_RPC_URL='${env.NEXT_PUBLIC_L2_DEVNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L2_TESTNET_RPC_URL='${params.NEXT_PUBLIC_L2_TESTNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L2_MAINNET_RPC_URL='${params.NEXT_PUBLIC_L2_MAINNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L1_MAINNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L1_MAINNET_RPC_IS_AUTHENTICATED}' \
                   --build-arg NEXT_PUBLIC_L2_MAINNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L2_MAINNET_RPC_IS_AUTHENTICATED}' \
                   --build-arg NEXT_PUBLIC_L1_TESTNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L1_TESTNET_RPC_IS_AUTHENTICATED}' \
                   --build-arg NEXT_PUBLIC_L2_TESTNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L2_TESTNET_RPC_IS_AUTHENTICATED}' \
-                  --build-arg NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED}' \
-                  --build-arg NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED}' \
+                  --build-arg NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED='${env.NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED}' \
+                  --build-arg NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED='${env.NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED}' \
                   --build-arg NEXT_PUBLIC_ETH_RPC_PROXY_USER='${env.NEXT_PUBLIC_ETH_RPC_PROXY_USER}' \
                   --build-arg NEXT_PUBLIC_ETH_RPC_PROXY_PASS='${env.NEXT_PUBLIC_ETH_RPC_PROXY_PASS}' \
               ."""
