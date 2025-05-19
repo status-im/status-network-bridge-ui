@@ -33,6 +33,7 @@ export const getChainNetworkTypeByChainId = (chainId: number) => {
   switch (supportedChain) {
     case ESupportedNetworks.DEV_L1:
     case ESupportedNetworks.DEV_L2:
+      return NetworkType.DEVNET;
     case ESupportedNetworks.ETH_SEPOLIA:
     case ESupportedNetworks.STATUS_SEPOLIA:
       return NetworkType.SEPOLIA;
