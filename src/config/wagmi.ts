@@ -22,6 +22,7 @@ const getTransports = () => {
   availableChainIds.forEach(chainId => {
     ts[chainId] = http(CHAIN_ID_TO_RPC[chainId], {
       batch: true,
+      timeout: 100_000,
       fetchOptions: {
         headers: generateTransportHeader(chainId)
       }
