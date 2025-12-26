@@ -2,7 +2,14 @@
 library 'status-jenkins-lib@v1.9.16'
 
 pipeline {
-  agent { label 'linux' }
+  agent {
+    docker {
+      label 'linuxcontainer'
+      image 'harbor.status.im/infra/ci-build-containers:linux-base-1.0.0'
+      args '--volume=/var/run/docker.sock:/var/run/docker.sock ' +
+           '--user jenkins'
+    }
+  }
 
   parameters {
     string(
@@ -80,6 +87,7 @@ pipeline {
   }
 
   options {
+    disableRestartFromStage()
     disableConcurrentBuilds()
     /* manage how many builds we keep */
     buildDiscarder(logRotator(
