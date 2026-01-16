@@ -45,8 +45,8 @@ export default function TermsModal() {
       <div className="mb-2 text-xs font-normal leading-relaxed">
         I understand and agree to comply with the Status Network Testnet Terms and Conditions in connection with my participation in the Status Network Testnet Programme.
         <br/>
-        <Link href="https://docs.status.network/terms-of-use" target="_blank" className="ml-1 font-extrabold">
-          (Terms of Service | Status Network )
+        <Link href="https://status.network/legal/terms-of-use" target="_blank" className="ml-1 font-extrabold">
+          (Terms of Use | Status Network )
         </Link>{" "}
       </div>
       <Button
