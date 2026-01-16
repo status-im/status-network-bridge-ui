@@ -24,7 +24,7 @@ export const FooterLinks = ({ toggleMenu }: FooterLinksProps) => (
       rel="noopener noreferrer"
       onClick={toggleMenu}
     >
-      Terms of service
+      Terms of Use
     </Link>
   </div>
 );
