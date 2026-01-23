@@ -1,35 +1,53 @@
 import { http } from "@wagmi/core";
 import { config } from "./config";
 import { chains } from "./wagmiChains"
-import {availableChainIds, CHAIN_ID_TO_RPC} from "@/utils/constants";
-import {Transport} from "viem";
-import {WagmiAdapter} from "@reown/appkit-adapter-wagmi";
-import {isChainRPCAuthenticated} from "@/utils/chainsUtil";
-import {generateRPCBasicAuthToken} from "@/utils/auth";
+import { availableChainIds, CHAIN_ID_TO_RPC } from "@/utils/constants";
+import { Transport } from "viem";
+import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
+import { isChainRPCAuthenticated } from "@/utils/chainsUtil";
+import { generateRPCBasicAuthToken, isPuzzleAuthEnabled } from "@/utils/auth";
+import { getToken, ensureToken, invalidateToken } from "@/lib/puzzle-auth";
 
 if (!config.walletConnectId) throw new Error("Project ID is not defined");
 
-const generateTransportHeader = (chainId: number) => {
-  if (isChainRPCAuthenticated(chainId)) {
-    return {
-      "Authorization": `Basic ${generateRPCBasicAuthToken()}`
-    }
-  }
-}
+const basicHeadersForChain = (chainId: number): Record<string, string> =>
+  isChainRPCAuthenticated(chainId)
+    ? { Authorization: `Basic ${generateRPCBasicAuthToken()}` }
+    : {};
 
-const getTransports = () => {
-  const ts: Record<number, Transport> = {};
-  availableChainIds.forEach(chainId => {
-    ts[chainId] = http(CHAIN_ID_TO_RPC[chainId], {
-      batch: true,
-      timeout: 100_000,
-      fetchOptions: {
-        headers: generateTransportHeader(chainId)
-      }
-    })
-  })
+const puzzleHooks = () => {
+  const RETRY_STATUS_CODES = new Set([401, 403, 429]);
 
-  return ts;
+  return {
+    onFetchRequest: async (_req: Request, init: RequestInit): Promise<RequestInit> => {
+      const token = getToken() ?? (await ensureToken());
+      if (!token) return init;
+
+      const headers = new Headers(init.headers);
+      headers.set("Authorization", `Bearer ${token}`);
+      return { ...init, headers };
+    },
+    onFetchResponse: async (res: Response) => {
+      if (RETRY_STATUS_CODES.has(res.status)) invalidateToken();
+    },
+  };
+};
+
+const createTransports = (): Record<number, Transport> => {
+  const puzzle = isPuzzleAuthEnabled();
+  const hooks = puzzle ? puzzleHooks() : undefined;
+
+  return Object.fromEntries(
+    availableChainIds.map((chainId) => [
+      chainId,
+      http(CHAIN_ID_TO_RPC[chainId], {
+        batch: true,
+        timeout: 100_000,
+        ...hooks,
+        ...(puzzle ? {} : { fetchOptions: { headers: basicHeadersForChain(chainId) } }),
+      }),
+    ])
+  ) as Record<number, Transport>;
 }
 
 export const wagmiAdapter = new WagmiAdapter({
@@ -40,7 +58,7 @@ export const wagmiAdapter = new WagmiAdapter({
   batch: {
     multicall: true,
   },
-  transports: getTransports()
+  transports: createTransports()
 });
 
 export const wagmiConfig = wagmiAdapter.wagmiConfig;
