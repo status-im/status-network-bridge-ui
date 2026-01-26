@@ -2,6 +2,18 @@
 const nextConfig = {
   output: "standalone",
   reactStrictMode: true,
+  rewrites: async () => {
+    return [
+      {
+        source: "/api/auth/:path*",
+        destination: "https://test.eth-rpc.status.im/auth/:path*",
+      },
+      {
+        source: "/api/rpc/:path*",
+        destination: "https://test.eth-rpc.status.im/:path*",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

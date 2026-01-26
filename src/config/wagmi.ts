@@ -6,9 +6,14 @@ import { Transport } from "viem";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { isChainRPCAuthenticated } from "@/utils/chainsUtil";
 import { generateRPCBasicAuthToken, isPuzzleAuthEnabled } from "@/utils/auth";
-import { getToken, ensureToken, invalidateToken } from "@/lib/puzzle-auth";
+import { initPuzzleAuth, getToken, ensureToken, invalidateToken } from "@/lib/puzzle-auth";
 
 if (!config.walletConnectId) throw new Error("Project ID is not defined");
+
+// Initialize puzzle auth if enabled
+if (isPuzzleAuthEnabled()) {
+  initPuzzleAuth();
+}
 
 const basicHeadersForChain = (chainId: number): Record<string, string> =>
   isChainRPCAuthenticated(chainId)
