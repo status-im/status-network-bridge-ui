@@ -1,12 +1,12 @@
 /**
  * Puzzle Solver
- * 
+ *
  * Solves Argon2id proof-of-work puzzles in the browser.
  * Uses hash-wasm for Argon2id computation.
  */
 
-import { argon2id } from 'hash-wasm';
-import type { Puzzle, Solution, PuzzleAuthResult, ProgressCallback } from './types';
+import { argon2id } from "hash-wasm";
+import type { Puzzle, Solution, PuzzleAuthResult, ProgressCallback } from "./types";
 
 /**
  * Convert hex string to Uint8Array
@@ -25,14 +25,14 @@ export const hexToUint8Array = (hex: string): Uint8Array => {
 export const checkDifficulty = (hash: string, difficulty: number): boolean => {
   if (hash.length < difficulty) return false;
   for (let i = 0; i < difficulty; i++) {
-    if (hash[i] !== '0') return false;
+    if (hash[i] !== "0") return false;
   }
   return true;
 };
 
 /**
  * Solve a puzzle using Argon2id
- * 
+ *
  * @param puzzle - The puzzle to solve
  * @param onProgress - Optional callback for progress updates
  * @param maxAttempts - Maximum number of nonces to try (default: 100000)
@@ -41,7 +41,7 @@ export const checkDifficulty = (hash: string, difficulty: number): boolean => {
 export const solvePuzzle = async (
   puzzle: Puzzle,
   onProgress?: ProgressCallback,
-  maxAttempts: number = 100000
+  maxAttempts: number = 100000,
 ): Promise<PuzzleAuthResult> => {
   const startTime = Date.now();
 
@@ -62,7 +62,7 @@ export const solvePuzzle = async (
           iterations: argon2_params.time,
           memorySize: argon2_params.memory_kb,
           hashLength: argon2_params.key_len,
-          outputType: 'hex',
+          outputType: "hex",
         });
 
         // Check if hash meets difficulty requirement
@@ -87,7 +87,7 @@ export const solvePuzzle = async (
         }
       } catch (error) {
         // Continue on individual hash errors
-        console.error('Argon2 computation error:', error);
+        console.error("Argon2 computation error:", error);
         continue;
       }
 
@@ -103,15 +103,15 @@ export const solvePuzzle = async (
       success: false,
       error: {
         message: `Failed to solve puzzle within ${maxAttempts} attempts`,
-        code: 'MAX_ATTEMPTS_EXCEEDED',
+        code: "MAX_ATTEMPTS_EXCEEDED",
       },
     };
   } catch (error) {
     return {
       success: false,
       error: {
-        message: error instanceof Error ? error.message : 'Unknown solver error',
-        code: 'SOLVER_ERROR',
+        message: error instanceof Error ? error.message : "Unknown solver error",
+        code: "SOLVER_ERROR",
       },
     };
   }

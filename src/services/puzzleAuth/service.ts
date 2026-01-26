@@ -1,0 +1,353 @@
+/**
+ * PuzzleAuthService
+ *
+ * Class-based service for managing puzzle authentication.
+ * Uses static methods and properties for singleton behavior.
+ */
+
+import type {
+  Puzzle,
+  Solution,
+  PuzzleAuthConfig,
+  PuzzleAuthResult,
+  TokenData,
+  ProgressCallback,
+  StatusCallback,
+} from "./types";
+import { solvePuzzle } from "./solver";
+import { getPuzzleAuthStoreState } from "@/stores/puzzleAuthStore";
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+const DEFAULTS = {
+  puzzlePath: "/api/auth/puzzle",
+  solvePath: "/api/auth/solve",
+  maxAttempts: 100000,
+  expiryBuffer: 5 * 60 * 1000, // 5 minutes
+} as const;
+
+const RETRY_CODES = [401, 403, 429] as const;
+
+// ============================================================================
+// Helper functions
+// ============================================================================
+
+const createError = (
+  code: string,
+  message: string,
+  status?: number,
+): PuzzleAuthResult => ({
+  success: false as const,
+  error: { code, message, status },
+});
+
+// ============================================================================
+// PuzzleAuthService Class
+// ============================================================================
+
+class PuzzleAuthService {
+  // Private static properties
+  private static config: PuzzleAuthConfig | null = null;
+  private static refreshInFlight: Promise<string | null> | null = null;
+
+  // ============================================================================
+  // Public Static Methods
+  // ============================================================================
+
+  /**
+   * Initialize the puzzle auth service with optional configuration
+   */
+  public static initialize(cfg?: PuzzleAuthConfig): void {
+    this.config = cfg ?? {};
+
+    // Validate stored token on initialization
+    const store = getPuzzleAuthStoreState();
+    const storedToken = store.getTokenData();
+
+    if (storedToken && !this.isValid(storedToken)) {
+      store.clearTokenData();
+    }
+  }
+
+  /**
+   * Check if the service has been initialized
+   */
+  public static isInitialized(): boolean {
+    return this.config !== null;
+  }
+
+  /**
+   * Get the current valid token (synchronous)
+   * Returns null if token is expired or doesn't exist
+   */
+  public static getToken(): string | null {
+    const store = getPuzzleAuthStoreState();
+    const tokenData = store.getTokenData();
+
+    if (!this.isValid(tokenData)) {
+      this.invalidateToken();
+      return null;
+    }
+
+    return tokenData!.token;
+  }
+
+  /**
+   * Invalidate the current token
+   */
+  public static invalidateToken(): void {
+    const store = getPuzzleAuthStoreState();
+    store.clearTokenData();
+  }
+
+  /**
+   * Wait for any in-flight authentication to complete
+   */
+  public static waitForAuthentication(): Promise<string | null> {
+    return this.refreshInFlight ?? Promise.resolve(this.getToken());
+  }
+
+  /**
+   * Refresh the token (generates a new one)
+   */
+  public static async refreshToken(
+    onProgress?: ProgressCallback,
+    onStatus?: StatusCallback,
+  ): Promise<string | null> {
+    // Return existing refresh if in flight
+    if (this.refreshInFlight) {
+      return this.refreshInFlight;
+    }
+
+    if (!this.config) {
+      console.error("PuzzleAuthService: Not initialized");
+      return null;
+    }
+
+    this.refreshInFlight = (async () => {
+      const result = await this.generateJwtToken(onProgress, onStatus);
+
+      if (result.success && result.token) {
+        const tokenData: TokenData = {
+          token: result.token,
+          expiresAt: (result.puzzle?.expires_at ?? 0) * 1000,
+          solveTime: result.solveTime,
+          attempts: result.attempts,
+        };
+
+        const store = getPuzzleAuthStoreState();
+        store.setTokenData(tokenData);
+
+        return result.token;
+      }
+
+      return null;
+    })().finally(() => {
+      this.refreshInFlight = null;
+    });
+
+    return this.refreshInFlight;
+  }
+
+  /**
+   * Ensure a valid token exists (get existing or refresh)
+   */
+  public static async ensureToken(
+    onProgress?: ProgressCallback,
+    onStatus?: StatusCallback,
+  ): Promise<string | null> {
+    const existingToken = this.getToken();
+    if (existingToken) {
+      return existingToken;
+    }
+
+    return this.refreshToken(onProgress, onStatus);
+  }
+
+  /**
+   * Create an authenticated fetch wrapper
+   */
+  public static createAuthenticatedFetch(
+    opts: {
+      maxRetries?: number;
+      shouldAddAuth?: (url: string) => boolean;
+      retryCodes?: readonly number[];
+    } = {},
+  ): typeof fetch {
+    const {
+      maxRetries = 1,
+      shouldAddAuth = () => true,
+      retryCodes = RETRY_CODES,
+    } = opts;
+
+    return async (input, init) => {
+      const url =
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.toString()
+            : input.url;
+
+      if (!shouldAddAuth(url)) {
+        return fetch(input, init);
+      }
+
+      const makeRequest = async (token: string | null) => {
+        const headers = new Headers(init?.headers);
+        if (token) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
+        return fetch(input, { ...init, headers });
+      };
+
+      let token =
+        (await this.waitForAuthentication()) ?? (await this.refreshToken());
+      let response = await makeRequest(token);
+
+      for (
+        let i = 0;
+        i < maxRetries && retryCodes.includes(response.status as (typeof retryCodes)[number]);
+        i++
+      ) {
+        this.invalidateToken();
+        token = await this.refreshToken();
+        if (!token) break;
+        response = await makeRequest(token);
+      }
+
+      return response;
+    };
+  }
+
+  // ============================================================================
+  // Private Static Methods
+  // ============================================================================
+
+  /**
+   * Check if token data is valid (not expired)
+   */
+  private static isValid(tokenData: TokenData | null): boolean {
+    if (!tokenData?.token) return false;
+    if (!tokenData.expiresAt) return true; // No expiry set, assume valid
+
+    const buffer = this.config?.expiryBuffer ?? DEFAULTS.expiryBuffer;
+    return Date.now() < tokenData.expiresAt - buffer;
+  }
+
+  /**
+   * Fetch a puzzle from the server
+   */
+  private static async getPuzzle(): Promise<PuzzleAuthResult> {
+    const fetchFn = this.config?.fetch ?? fetch;
+    const puzzlePath = this.config?.puzzlePath ?? DEFAULTS.puzzlePath;
+
+    try {
+      const response = await fetchFn(puzzlePath, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        return createError(
+          "PUZZLE_FETCH_ERROR",
+          `Failed to get puzzle: ${response.statusText}`,
+          response.status,
+        );
+      }
+
+      return { success: true, puzzle: await response.json() };
+    } catch (error) {
+      return createError(
+        "NETWORK_ERROR",
+        error instanceof Error ? error.message : "Unknown error",
+      );
+    }
+  }
+
+  /**
+   * Submit a solution to the server
+   */
+  private static async submitSolution(
+    solution: Solution,
+  ): Promise<PuzzleAuthResult> {
+    const fetchFn = this.config?.fetch ?? fetch;
+    const solvePath = this.config?.solvePath ?? DEFAULTS.solvePath;
+
+    try {
+      const response = await fetchFn(solvePath, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(solution),
+      });
+
+      if (!response.ok) {
+        return createError(
+          "SOLUTION_SUBMIT_ERROR",
+          `Failed to submit: ${response.statusText}`,
+          response.status,
+        );
+      }
+
+      const data = await response.json();
+      return { success: true, token: data.token };
+    } catch (error) {
+      return createError(
+        "NETWORK_ERROR",
+        error instanceof Error ? error.message : "Unknown error",
+      );
+    }
+  }
+
+  /**
+   * Generate a JWT token by solving a puzzle
+   */
+  private static async generateJwtToken(
+    onProgress?: ProgressCallback,
+    onStatus?: StatusCallback,
+  ): Promise<PuzzleAuthResult> {
+    try {
+      onStatus?.("Getting puzzle...");
+      const puzzleResult = await this.getPuzzle();
+
+      if (!puzzleResult.success || !puzzleResult.puzzle) {
+        return puzzleResult;
+      }
+
+      onStatus?.("Solving puzzle...");
+      const solveResult = await solvePuzzle(
+        puzzleResult.puzzle,
+        onProgress,
+        this.config?.maxSolveAttempts ?? DEFAULTS.maxAttempts,
+      );
+
+      if (!solveResult.success || !solveResult.solution) {
+        return solveResult;
+      }
+
+      onStatus?.("Submitting solution...");
+      const submitResult = await this.submitSolution(solveResult.solution);
+
+      if (!submitResult.success) {
+        return submitResult;
+      }
+
+      return {
+        success: true,
+        token: submitResult.token,
+        puzzle: puzzleResult.puzzle,
+        solution: solveResult.solution,
+        solveTime: solveResult.solveTime,
+        attempts: solveResult.attempts,
+      };
+    } catch (error) {
+      return createError(
+        "GENERATE_TOKEN_ERROR",
+        error instanceof Error ? error.message : "Unknown error",
+      );
+    }
+  }
+}
+
+export default PuzzleAuthService;
