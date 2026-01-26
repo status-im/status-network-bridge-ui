@@ -1,18 +1,18 @@
 import { http } from "@wagmi/core";
 import { config } from "./config";
-import { chains } from "./wagmiChains"
+import { chains } from "./wagmiChains";
 import { availableChainIds, CHAIN_ID_TO_RPC } from "@/utils/constants";
 import { Transport } from "viem";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { isChainRPCAuthenticated } from "@/utils/chainsUtil";
 import { generateRPCBasicAuthToken, isPuzzleAuthEnabled } from "@/utils/auth";
-import { initPuzzleAuth, getToken, ensureToken, invalidateToken } from "@/lib/puzzle-auth";
+import { PuzzleAuthService } from "@/services/puzzleAuth";
 
 if (!config.walletConnectId) throw new Error("Project ID is not defined");
 
 // Initialize puzzle auth if enabled
 if (isPuzzleAuthEnabled()) {
-  initPuzzleAuth();
+  PuzzleAuthService.initialize();
 }
 
 const basicHeadersForChain = (chainId: number): Record<string, string> =>
@@ -25,7 +25,7 @@ const puzzleHooks = () => {
 
   return {
     onFetchRequest: async (_req: Request, init: RequestInit): Promise<RequestInit> => {
-      const token = getToken() ?? (await ensureToken());
+      const token = PuzzleAuthService.getToken() ?? (await PuzzleAuthService.ensureToken());
       if (!token) return init;
 
       const headers = new Headers(init.headers);
@@ -33,7 +33,9 @@ const puzzleHooks = () => {
       return { ...init, headers };
     },
     onFetchResponse: async (res: Response) => {
-      if (RETRY_STATUS_CODES.has(res.status)) invalidateToken();
+      if (RETRY_STATUS_CODES.has(res.status)) {
+        PuzzleAuthService.invalidateToken();
+      }
     },
   };
 };
@@ -49,11 +51,13 @@ const createTransports = (): Record<number, Transport> => {
         batch: true,
         timeout: 100_000,
         ...hooks,
-        ...(puzzle ? {} : { fetchOptions: { headers: basicHeadersForChain(chainId) } }),
+        fetchOptions: {
+          headers: puzzle ? {} : basicHeadersForChain(chainId),
+        },
       }),
-    ])
+    ]),
   ) as Record<number, Transport>;
-}
+};
 
 export const wagmiAdapter = new WagmiAdapter({
   networks: chains,
