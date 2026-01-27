@@ -45,8 +45,6 @@ export interface PuzzleAuthResult {
 }
 
 export interface PuzzleAuthConfig {
-  puzzlePath?: string;
-  solvePath?: string;
   maxSolveAttempts?: number;
   expiryBuffer?: number;
   fetch?: typeof fetch;

@@ -17,16 +17,18 @@ const createPuzzleAuthProvider = (rpcUrl: string): JsonRpcProvider => {
   const fetchRequest = new FetchRequest(rpcUrl);
 
   fetchRequest.preflightFunc = async (req: FetchRequest) => {
-    const token = PuzzleAuthService.getToken() ?? (await PuzzleAuthService.ensureToken());
+    const origin = new URL(req.url).origin;
+    const token = PuzzleAuthService.getToken(origin) ?? (await PuzzleAuthService.ensureToken(origin));
     if (token) {
       req.setHeader("Authorization", `Bearer ${token}`);
     }
     return req;
   };
 
-  fetchRequest.processFunc = async (_req: FetchRequest, resp: FetchResponse) => {
+  fetchRequest.processFunc = async (req: FetchRequest, resp: FetchResponse) => {
     if ([401, 403, 429].includes(resp.statusCode)) {
-      PuzzleAuthService.invalidateToken();
+      const origin = new URL(req.url).origin;
+      PuzzleAuthService.invalidateToken(origin);
     }
     return resp;
   };

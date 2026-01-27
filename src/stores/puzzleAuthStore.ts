@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { config } from "@/config";
 
-const PROJECT_ID = process.env.NEXT_PUBLIC_PROJECT_ID || "bridge";
-const STORAGE_KEY = `${PROJECT_ID}-puzzle-auth`;
+const ANALYTICS_DOMAIN = process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN || "bridge";
+const STORAGE_KEY = `${ANALYTICS_DOMAIN}-puzzle-auth`;
 
 export interface TokenData {
   token: string;
@@ -13,20 +13,20 @@ export interface TokenData {
 }
 
 export type PuzzleAuthState = {
-  tokenData: TokenData | null;
+  tokens: Record<string, TokenData>; // key = origin
   rehydrated: boolean;
 };
 
 export type PuzzleAuthActions = {
-  setTokenData: (data: TokenData) => void;
-  clearTokenData: () => void;
-  getTokenData: () => TokenData | null;
+  setTokenData: (origin: string, data: TokenData) => void;
+  clearTokenData: (origin: string) => void;
+  getTokenData: (origin: string) => TokenData | null;
 };
 
 export type PuzzleAuthStore = PuzzleAuthState & PuzzleAuthActions;
 
 export const defaultInitState: PuzzleAuthState = {
-  tokenData: null,
+  tokens: {},
   rehydrated: false,
 };
 
@@ -34,9 +34,16 @@ export const usePuzzleAuthStore = create<PuzzleAuthStore>()(
   persist(
     (set, get) => ({
       ...defaultInitState,
-      setTokenData: (data) => set({ tokenData: data }),
-      clearTokenData: () => set({ tokenData: null }),
-      getTokenData: () => get().tokenData,
+      setTokenData: (origin, data) =>
+        set((state) => ({
+          tokens: { ...state.tokens, [origin]: data },
+        })),
+      clearTokenData: (origin) =>
+        set((state) => {
+          const { [origin]: _, ...rest } = state.tokens;
+          return { tokens: rest };
+        }),
+      getTokenData: (origin) => get().tokens[origin] ?? null,
     }),
     {
       name: STORAGE_KEY,

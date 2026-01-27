@@ -22,8 +22,6 @@ import { getPuzzleAuthStoreState } from "@/stores/puzzleAuthStore";
 // ============================================================================
 
 const DEFAULTS = {
-  puzzlePath: "/api/auth/puzzle",
-  solvePath: "/api/auth/solve",
   maxAttempts: 100000,
   expiryBuffer: 5 * 60 * 1000, // 5 minutes
 } as const;
@@ -50,7 +48,7 @@ const createError = (
 class PuzzleAuthService {
   // Private static properties
   private static config: PuzzleAuthConfig | null = null;
-  private static refreshInFlight: Promise<string | null> | null = null;
+  private static refreshInFlight: Map<string, Promise<string | null>> = new Map();
 
   // ============================================================================
   // Public Static Methods
@@ -61,14 +59,6 @@ class PuzzleAuthService {
    */
   public static initialize(cfg?: PuzzleAuthConfig): void {
     this.config = cfg ?? {};
-
-    // Validate stored token on initialization
-    const store = getPuzzleAuthStoreState();
-    const storedToken = store.getTokenData();
-
-    if (storedToken && !this.isValid(storedToken)) {
-      store.clearTokenData();
-    }
   }
 
   /**
@@ -79,15 +69,15 @@ class PuzzleAuthService {
   }
 
   /**
-   * Get the current valid token (synchronous)
+   * Get the current valid token for an origin (synchronous)
    * Returns null if token is expired or doesn't exist
    */
-  public static getToken(): string | null {
+  public static getToken(origin: string): string | null {
     const store = getPuzzleAuthStoreState();
-    const tokenData = store.getTokenData();
+    const tokenData = store.getTokenData(origin);
 
     if (!this.isValid(tokenData)) {
-      this.invalidateToken();
+      this.invalidateToken(origin);
       return null;
     }
 
@@ -95,30 +85,32 @@ class PuzzleAuthService {
   }
 
   /**
-   * Invalidate the current token
+   * Invalidate the token for an origin
    */
-  public static invalidateToken(): void {
+  public static invalidateToken(origin: string): void {
     const store = getPuzzleAuthStoreState();
-    store.clearTokenData();
+    store.clearTokenData(origin);
   }
 
   /**
-   * Wait for any in-flight authentication to complete
+   * Wait for any in-flight authentication to complete for an origin
    */
-  public static waitForAuthentication(): Promise<string | null> {
-    return this.refreshInFlight ?? Promise.resolve(this.getToken());
+  public static waitForAuthentication(origin: string): Promise<string | null> {
+    return this.refreshInFlight.get(origin) ?? Promise.resolve(this.getToken(origin));
   }
 
   /**
-   * Refresh the token (generates a new one)
+   * Refresh the token for an origin (generates a new one)
    */
   public static async refreshToken(
+    origin: string,
     onProgress?: ProgressCallback,
     onStatus?: StatusCallback,
   ): Promise<string | null> {
     // Return existing refresh if in flight
-    if (this.refreshInFlight) {
-      return this.refreshInFlight;
+    const existingRefresh = this.refreshInFlight.get(origin);
+    if (existingRefresh) {
+      return existingRefresh;
     }
 
     if (!this.config) {
@@ -126,8 +118,8 @@ class PuzzleAuthService {
       return null;
     }
 
-    this.refreshInFlight = (async () => {
-      const result = await this.generateJwtToken(onProgress, onStatus);
+    const refreshPromise = (async () => {
+      const result = await this.generateJwtToken(origin, onProgress, onStatus);
 
       if (result.success && result.token) {
         const tokenData: TokenData = {
@@ -138,32 +130,34 @@ class PuzzleAuthService {
         };
 
         const store = getPuzzleAuthStoreState();
-        store.setTokenData(tokenData);
+        store.setTokenData(origin, tokenData);
 
         return result.token;
       }
 
       return null;
     })().finally(() => {
-      this.refreshInFlight = null;
+      this.refreshInFlight.delete(origin);
     });
 
-    return this.refreshInFlight;
+    this.refreshInFlight.set(origin, refreshPromise);
+    return refreshPromise;
   }
 
   /**
-   * Ensure a valid token exists (get existing or refresh)
+   * Ensure a valid token exists for an origin (get existing or refresh)
    */
   public static async ensureToken(
+    origin: string,
     onProgress?: ProgressCallback,
     onStatus?: StatusCallback,
   ): Promise<string | null> {
-    const existingToken = this.getToken();
+    const existingToken = this.getToken(origin);
     if (existingToken) {
       return existingToken;
     }
 
-    return this.refreshToken(onProgress, onStatus);
+    return this.refreshToken(origin, onProgress, onStatus);
   }
 
   /**
@@ -194,6 +188,8 @@ class PuzzleAuthService {
         return fetch(input, init);
       }
 
+      const origin = new URL(url).origin;
+
       const makeRequest = async (token: string | null) => {
         const headers = new Headers(init?.headers);
         if (token) {
@@ -203,7 +199,7 @@ class PuzzleAuthService {
       };
 
       let token =
-        (await this.waitForAuthentication()) ?? (await this.refreshToken());
+        (await this.waitForAuthentication(origin)) ?? (await this.refreshToken(origin));
       let response = await makeRequest(token);
 
       for (
@@ -211,8 +207,8 @@ class PuzzleAuthService {
         i < maxRetries && retryCodes.includes(response.status as (typeof retryCodes)[number]);
         i++
       ) {
-        this.invalidateToken();
-        token = await this.refreshToken();
+        this.invalidateToken(origin);
+        token = await this.refreshToken(origin);
         if (!token) break;
         response = await makeRequest(token);
       }
@@ -237,11 +233,11 @@ class PuzzleAuthService {
   }
 
   /**
-   * Fetch a puzzle from the server
+   * Fetch a puzzle from the server for a given origin
    */
-  private static async getPuzzle(): Promise<PuzzleAuthResult> {
+  private static async getPuzzle(origin: string): Promise<PuzzleAuthResult> {
     const fetchFn = this.config?.fetch ?? fetch;
-    const puzzlePath = this.config?.puzzlePath ?? DEFAULTS.puzzlePath;
+    const puzzlePath = `${origin}/auth/puzzle`;
 
     try {
       const response = await fetchFn(puzzlePath, {
@@ -267,13 +263,14 @@ class PuzzleAuthService {
   }
 
   /**
-   * Submit a solution to the server
+   * Submit a solution to the server for a given origin
    */
   private static async submitSolution(
+    origin: string,
     solution: Solution,
   ): Promise<PuzzleAuthResult> {
     const fetchFn = this.config?.fetch ?? fetch;
-    const solvePath = this.config?.solvePath ?? DEFAULTS.solvePath;
+    const solvePath = `${origin}/auth/solve`;
 
     try {
       const response = await fetchFn(solvePath, {
@@ -301,15 +298,16 @@ class PuzzleAuthService {
   }
 
   /**
-   * Generate a JWT token by solving a puzzle
+   * Generate a JWT token by solving a puzzle for a given origin
    */
   private static async generateJwtToken(
+    origin: string,
     onProgress?: ProgressCallback,
     onStatus?: StatusCallback,
   ): Promise<PuzzleAuthResult> {
     try {
       onStatus?.("Getting puzzle...");
-      const puzzleResult = await this.getPuzzle();
+      const puzzleResult = await this.getPuzzle(origin);
 
       if (!puzzleResult.success || !puzzleResult.puzzle) {
         return puzzleResult;
@@ -327,7 +325,7 @@ class PuzzleAuthService {
       }
 
       onStatus?.("Submitting solution...");
-      const submitResult = await this.submitSolution(solveResult.solution);
+      const submitResult = await this.submitSolution(origin, solveResult.solution);
 
       if (!submitResult.success) {
         return submitResult;

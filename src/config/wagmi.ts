@@ -24,8 +24,9 @@ const puzzleHooks = () => {
   const RETRY_STATUS_CODES = new Set([401, 403, 429]);
 
   return {
-    onFetchRequest: async (_req: Request, init: RequestInit): Promise<RequestInit> => {
-      const token = PuzzleAuthService.getToken() ?? (await PuzzleAuthService.ensureToken());
+    onFetchRequest: async (req: Request, init: RequestInit): Promise<RequestInit> => {
+      const origin = new URL(req.url).origin;
+      const token = PuzzleAuthService.getToken(origin) ?? (await PuzzleAuthService.ensureToken(origin));
       if (!token) return init;
 
       const headers = new Headers(init.headers);
@@ -34,7 +35,8 @@ const puzzleHooks = () => {
     },
     onFetchResponse: async (res: Response) => {
       if (RETRY_STATUS_CODES.has(res.status)) {
-        PuzzleAuthService.invalidateToken();
+        const origin = new URL(res.url).origin;
+        PuzzleAuthService.invalidateToken(origin);
       }
     },
   };
