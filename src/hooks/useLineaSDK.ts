@@ -13,22 +13,24 @@ interface LineaSDKContracts {
   L2: L2MessageServiceContract;
 }
 
+const RETRY_STATUS_CODES = new Set([401, 403, 429]);
+
 const createPuzzleAuthProvider = (rpcUrl: string): JsonRpcProvider => {
+  const origin = new URL(rpcUrl).origin;
+  const service = PuzzleAuthService.forOrigin(origin);
   const fetchRequest = new FetchRequest(rpcUrl);
 
   fetchRequest.preflightFunc = async (req: FetchRequest) => {
-    const origin = new URL(req.url).origin;
-    const token = PuzzleAuthService.getToken(origin) ?? (await PuzzleAuthService.ensureToken(origin));
+    const token = service.getToken() ?? (await service.ensureToken());
     if (token) {
       req.setHeader("Authorization", `Bearer ${token}`);
     }
     return req;
   };
 
-  fetchRequest.processFunc = async (req: FetchRequest, resp: FetchResponse) => {
-    if ([401, 403, 429].includes(resp.statusCode)) {
-      const origin = new URL(req.url).origin;
-      PuzzleAuthService.invalidateToken(origin);
+  fetchRequest.processFunc = async (_req: FetchRequest, resp: FetchResponse) => {
+    if (RETRY_STATUS_CODES.has(resp.statusCode)) {
+      service.invalidateToken();
     }
     return resp;
   };

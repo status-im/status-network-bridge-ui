@@ -13,7 +13,6 @@ export interface TokenData {
 
 export type PuzzleAuthState = {
   tokens: Record<string, TokenData>; // key = origin
-  rehydrated: boolean;
 };
 
 export type PuzzleAuthActions = {
@@ -26,7 +25,6 @@ export type PuzzleAuthStore = PuzzleAuthState & PuzzleAuthActions;
 
 export const defaultInitState: PuzzleAuthState = {
   tokens: {},
-  rehydrated: false,
 };
 
 export const usePuzzleAuthStore = create<PuzzleAuthStore>()(
@@ -50,11 +48,6 @@ export const usePuzzleAuthStore = create<PuzzleAuthStore>()(
       storage: createJSONStorage(() => localStorage),
       migrate: () => {
         return defaultInitState;
-      },
-      onRehydrateStorage: () => (state) => {
-        if (state) {
-          state.rehydrated = true;
-        }
       },
     },
   ),

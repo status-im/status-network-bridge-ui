@@ -5,12 +5,6 @@
  */
 
 import PuzzleAuthService from "./service";
-import { isPuzzleAuthEnabled } from "@/utils/auth";
-
-// Initialize the service when module is imported
-if (isPuzzleAuthEnabled()) {
-  PuzzleAuthService.initialize();
-}
 
 export { PuzzleAuthService };
 export type {

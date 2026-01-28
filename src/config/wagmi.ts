@@ -15,13 +15,15 @@ const basicHeadersForChain = (chainId: number): Record<string, string> =>
     ? { Authorization: `Basic ${generateRPCBasicAuthToken()}` }
     : {};
 
-const puzzleHooks = () => {
-  const RETRY_STATUS_CODES = new Set([401, 403, 429]);
+const RETRY_STATUS_CODES = new Set([401, 403, 429]);
+
+const puzzleHooks = (rpcUrl: string) => {
+  const origin = new URL(rpcUrl).origin;
+  const service = PuzzleAuthService.forOrigin(origin);
 
   return {
-    onFetchRequest: async (req: Request, init: RequestInit): Promise<RequestInit> => {
-      const origin = new URL(req.url).origin;
-      const token = PuzzleAuthService.getToken(origin) ?? (await PuzzleAuthService.ensureToken(origin));
+    onFetchRequest: async (_req: Request, init: RequestInit): Promise<RequestInit> => {
+      const token = service.getToken() ?? (await service.ensureToken());
       if (!token) return init;
 
       const headers = new Headers(init.headers);
@@ -30,8 +32,7 @@ const puzzleHooks = () => {
     },
     onFetchResponse: async (res: Response) => {
       if (RETRY_STATUS_CODES.has(res.status)) {
-        const origin = new URL(res.url).origin;
-        PuzzleAuthService.invalidateToken(origin);
+        service.invalidateToken();
       }
     },
   };
@@ -39,20 +40,22 @@ const puzzleHooks = () => {
 
 const createTransports = (): Record<number, Transport> => {
   const puzzle = isPuzzleAuthEnabled();
-  const hooks = puzzle ? puzzleHooks() : undefined;
 
   return Object.fromEntries(
-    availableChainIds.map((chainId) => [
-      chainId,
-      http(CHAIN_ID_TO_RPC[chainId], {
-        batch: true,
-        timeout: 100_000,
-        ...hooks,
-        fetchOptions: {
-          headers: puzzle ? {} : basicHeadersForChain(chainId),
-        },
-      }),
-    ]),
+    availableChainIds.map((chainId) => {
+      const rpcUrl = CHAIN_ID_TO_RPC[chainId];
+      return [
+        chainId,
+        http(rpcUrl, {
+          batch: true,
+          timeout: 100_000,
+          ...(puzzle ? puzzleHooks(rpcUrl) : {}),
+          fetchOptions: {
+            headers: puzzle ? {} : basicHeadersForChain(chainId),
+          },
+        }),
+      ];
+    }),
   ) as Record<number, Transport>;
 };
 
