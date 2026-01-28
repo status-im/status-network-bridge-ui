@@ -4,7 +4,15 @@
  * Exports the PuzzleAuthService class and related types.
  */
 
-export { default as PuzzleAuthService } from "./service";
+import PuzzleAuthService from "./service";
+import { isPuzzleAuthEnabled } from "@/utils/auth";
+
+// Initialize the service when module is imported
+if (isPuzzleAuthEnabled()) {
+  PuzzleAuthService.initialize();
+}
+
+export { PuzzleAuthService };
 export type {
   Puzzle,
   Solution,

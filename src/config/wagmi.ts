@@ -10,11 +10,6 @@ import { PuzzleAuthService } from "@/services/puzzleAuth";
 
 if (!config.walletConnectId) throw new Error("Project ID is not defined");
 
-// Initialize puzzle auth if enabled
-if (isPuzzleAuthEnabled()) {
-  PuzzleAuthService.initialize();
-}
-
 const basicHeadersForChain = (chainId: number): Record<string, string> =>
   isChainRPCAuthenticated(chainId)
     ? { Authorization: `Basic ${generateRPCBasicAuthToken()}` }

@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { config } from "@/config";
 
-const ANALYTICS_DOMAIN = process.env.NEXT_PUBLIC_ANALYTICS_DOMAIN || "bridge";
-const STORAGE_KEY = `${ANALYTICS_DOMAIN}-puzzle-auth`;
+const STORAGE_KEY = "bridge-puzzle-auth";
 
 export interface TokenData {
   token: string;

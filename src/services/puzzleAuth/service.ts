@@ -17,20 +17,12 @@ import type {
 import { solvePuzzle } from "./solver";
 import { getPuzzleAuthStoreState } from "@/stores/puzzleAuthStore";
 
-// ============================================================================
-// Constants
-// ============================================================================
-
 const DEFAULTS = {
   maxAttempts: 100000,
   expiryBuffer: 5 * 60 * 1000, // 5 minutes
 } as const;
 
 const RETRY_CODES = [401, 403, 429] as const;
-
-// ============================================================================
-// Helper functions
-// ============================================================================
 
 const createError = (
   code: string,
@@ -41,31 +33,16 @@ const createError = (
   error: { code, message, status },
 });
 
-// ============================================================================
-// PuzzleAuthService Class
-// ============================================================================
-
 class PuzzleAuthService {
   // Private static properties
   private static config: PuzzleAuthConfig | null = null;
   private static refreshInFlight: Map<string, Promise<string | null>> = new Map();
-
-  // ============================================================================
-  // Public Static Methods
-  // ============================================================================
 
   /**
    * Initialize the puzzle auth service with optional configuration
    */
   public static initialize(cfg?: PuzzleAuthConfig): void {
     this.config = cfg ?? {};
-  }
-
-  /**
-   * Check if the service has been initialized
-   */
-  public static isInitialized(): boolean {
-    return this.config !== null;
   }
 
   /**
@@ -90,13 +67,6 @@ class PuzzleAuthService {
   public static invalidateToken(origin: string): void {
     const store = getPuzzleAuthStoreState();
     store.clearTokenData(origin);
-  }
-
-  /**
-   * Wait for any in-flight authentication to complete for an origin
-   */
-  public static waitForAuthentication(origin: string): Promise<string | null> {
-    return this.refreshInFlight.get(origin) ?? Promise.resolve(this.getToken(origin));
   }
 
   /**
@@ -161,67 +131,6 @@ class PuzzleAuthService {
   }
 
   /**
-   * Create an authenticated fetch wrapper
-   */
-  public static createAuthenticatedFetch(
-    opts: {
-      maxRetries?: number;
-      shouldAddAuth?: (url: string) => boolean;
-      retryCodes?: readonly number[];
-    } = {},
-  ): typeof fetch {
-    const {
-      maxRetries = 1,
-      shouldAddAuth = () => true,
-      retryCodes = RETRY_CODES,
-    } = opts;
-
-    return async (input, init) => {
-      const url =
-        typeof input === "string"
-          ? input
-          : input instanceof URL
-            ? input.toString()
-            : input.url;
-
-      if (!shouldAddAuth(url)) {
-        return fetch(input, init);
-      }
-
-      const origin = new URL(url).origin;
-
-      const makeRequest = async (token: string | null) => {
-        const headers = new Headers(init?.headers);
-        if (token) {
-          headers.set("Authorization", `Bearer ${token}`);
-        }
-        return fetch(input, { ...init, headers });
-      };
-
-      let token =
-        (await this.waitForAuthentication(origin)) ?? (await this.refreshToken(origin));
-      let response = await makeRequest(token);
-
-      for (
-        let i = 0;
-        i < maxRetries && retryCodes.includes(response.status as (typeof retryCodes)[number]);
-        i++
-      ) {
-        this.invalidateToken(origin);
-        token = await this.refreshToken(origin);
-        if (!token) break;
-        response = await makeRequest(token);
-      }
-
-      return response;
-    };
-  }
-
-  // ============================================================================
-  // Private Static Methods
-  // ============================================================================
-
-  /**
    * Check if token data is valid (not expired)
    */
   private static isValid(tokenData: TokenData | null): boolean {
@@ -236,11 +145,10 @@ class PuzzleAuthService {
    * Fetch a puzzle from the server for a given origin
    */
   private static async getPuzzle(origin: string): Promise<PuzzleAuthResult> {
-    const fetchFn = this.config?.fetch ?? fetch;
     const puzzlePath = `${origin}/auth/puzzle`;
 
     try {
-      const response = await fetchFn(puzzlePath, {
+      const response = await fetch(puzzlePath, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -269,11 +177,10 @@ class PuzzleAuthService {
     origin: string,
     solution: Solution,
   ): Promise<PuzzleAuthResult> {
-    const fetchFn = this.config?.fetch ?? fetch;
     const solvePath = `${origin}/auth/solve`;
 
     try {
-      const response = await fetchFn(solvePath, {
+      const response = await fetch(solvePath, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(solution),

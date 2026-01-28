@@ -47,7 +47,6 @@ export interface PuzzleAuthResult {
 export interface PuzzleAuthConfig {
   maxSolveAttempts?: number;
   expiryBuffer?: number;
-  fetch?: typeof fetch;
 }
 
 export interface TokenData {
