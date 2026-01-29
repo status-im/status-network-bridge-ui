@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { LineaSDK } from "@consensys/linea-sdk";
 import { L1MessageServiceContract, L2MessageServiceContract } from "@consensys/linea-sdk/dist/lib/contracts";
-import { config, NetworkType } from "@/config";
+import { config, NetworkType, AuthType } from "@/config";
 import { useChainStore } from "@/stores/chainStore";
 import { FetchRequest, FetchResponse, JsonRpcProvider } from "ethers";
-import { generateRPCBasicAuthToken, isPuzzleAuthEnabled } from "@/utils/auth";
-import { isChainRPCAuthenticated } from "@/utils/chainsUtil";
+import { generateRPCBasicAuthToken } from "@/utils/auth";
+import { getChainAuthType } from "@/utils/chainsUtil";
 import { PuzzleAuthService } from "@/services/puzzleAuth";
 
 interface LineaSDKContracts {
@@ -62,19 +62,19 @@ const useLineaSDK = () => {
       l1RpcUrl = config.networks[networkType].L1.defaultRPC;
       l2RpcUrl = config.networks[networkType].L2.defaultRPC;
 
-      const isL1Authenticated = isChainRPCAuthenticated(config.networks[networkType].L1.chainId);
-      const isL2Authenticated = isChainRPCAuthenticated(config.networks[networkType].L2.chainId);
-      const usePuzzleAuth = isPuzzleAuthEnabled();
+      const l1AuthType = getChainAuthType(config.networks[networkType].L1.chainId);
+      const l2AuthType = getChainAuthType(config.networks[networkType].L2.chainId);
 
-      if (isL1Authenticated || isL2Authenticated) {
-        const createProvider = usePuzzleAuth ? createPuzzleAuthProvider : createBasicAuthProvider;
+      if (l1AuthType === AuthType.POW) {
+        l1Rpc = createPuzzleAuthProvider(l1RpcUrl);
+      } else if (l1AuthType === AuthType.BASIC) {
+        l1Rpc = createBasicAuthProvider(l1RpcUrl);
+      }
 
-        if (isL1Authenticated) {
-          l1Rpc = createProvider(l1RpcUrl);
-        }
-        if (isL2Authenticated) {
-          l2Rpc = createProvider(l2RpcUrl);
-        }
+      if (l2AuthType === AuthType.POW) {
+        l2Rpc = createPuzzleAuthProvider(l2RpcUrl);
+      } else if (l2AuthType === AuthType.BASIC) {
+        l2Rpc = createBasicAuthProvider(l2RpcUrl);
       }
     } else {
       return { lineaSDK: null, lineaSDKContracts: null };

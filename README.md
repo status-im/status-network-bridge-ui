@@ -46,12 +46,20 @@ Where can I obtain the needed values?
 | Value                                                            | Description                                       | Link                     |
 |------------------------------------------------------------------|---------------------------------------------------|--------------------------|
 | NEXT_PUBLIC_WALLET_CONNECT_ID                                    | The Project ID for using Wallet Connect           | https://cloud.reown.com/ |
-| NEXT_PUBLIC_ETH_RPC_PROXY_USER                                   | The username for authentication of Status RPC Proxy | N/A                      |
-| NEXT_PUBLIC_ETH_RPC_PROXY_PASS                                   | The password for authentication of Status RPC Proxy | N/A                      |
-| NEXT_PUBLIC_[L1/L2]_[DEVNET/TESTNET/MAINNET]_RPC_IS_AUTHENTICATED | Flag controlling if Authorization header will be injected to requests or not                                   | N/A                      
-| NEXT_PUBLIC_[L1/L2]_[DEVNET/TESTNET/MAINNET]_RPC_URL          | The RPC URL for the corresponding network (L1 / L2) | N/A                      |
+| NEXT_PUBLIC_ETH_RPC_PROXY_USER                                   | The username for Basic Auth (only needed if AUTH_TYPE=basic) | N/A                      |
+| NEXT_PUBLIC_ETH_RPC_PROXY_PASS                                   | The password for Basic Auth (only needed if AUTH_TYPE=basic) | N/A                      |
+| NEXT_PUBLIC_[L1/L2]_[DEVNET/TESTNET/MAINNET]_RPC_AUTH_TYPE      | Authentication type: `none`, `basic`, or `pow` (Puzzle Auth) | N/A                      
+| NEXT_PUBLIC_[L1/L2]_[DEVNET/TESTNET/MAINNET]_RPC_URL            | The RPC URL for the corresponding network (L1 / L2) | N/A                      |
+
+**Authentication Types:**
+- `none` - No authentication required
+- `basic` - Basic Authentication using NEXT_PUBLIC_ETH_RPC_PROXY_USER and NEXT_PUBLIC_ETH_RPC_PROXY_PASS
+- `pow` - Puzzle Auth (Proof of Work) - Client solves Argon2id puzzle to obtain JWT token
+
 > [!IMPORTANT]  
 > Ensure that you've filled all the needed values in the .env
+> 
+> Each network (L1/L2 Mainnet, Testnet, Devnet) can use different authentication types independently
 
 
 **Step 3:** Run docker  

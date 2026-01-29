@@ -54,35 +54,35 @@ pipeline {
       description: 'L2 Mainnet RPC URL.',
       defaultValue: params.NEXT_PUBLIC_L2_MAINNET_RPC_URL ?: 'https://snt.eth-rpc.status.im/status/mainnet',
     )
-    booleanParam(
-      name: 'NEXT_PUBLIC_L1_MAINNET_RPC_IS_AUTHENTICATED',
-      description: 'Flag controlling if auth header for L1 Mainnet will be injected to requests.',
-      defaultValue: params.NEXT_PUBLIC_L1_MAINNET_RPC_IS_AUTHENTICATED ?: false,
+    string(
+      name: 'NEXT_PUBLIC_L1_MAINNET_RPC_AUTH_TYPE',
+      description: 'Auth type for L1 Mainnet RPC (none, basic, pow).',
+      defaultValue: params.NEXT_PUBLIC_L1_MAINNET_RPC_AUTH_TYPE ?: 'none',
     )
-    booleanParam(
-      name: 'NEXT_PUBLIC_L2_MAINNET_RPC_IS_AUTHENTICATED',
-      description: 'Flag controlling if auth header for L2 Mainnet will be injected to requests.',
-      defaultValue: params.NEXT_PUBLIC_L2_MAINNET_RPC_IS_AUTHENTICATED ?: false,
+    string(
+      name: 'NEXT_PUBLIC_L2_MAINNET_RPC_AUTH_TYPE',
+      description: 'Auth type for L2 Mainnet RPC (none, basic, pow).',
+      defaultValue: params.NEXT_PUBLIC_L2_MAINNET_RPC_AUTH_TYPE ?: 'none',
     )
-    booleanParam(
-      name: 'NEXT_PUBLIC_L1_TESTNET_RPC_IS_AUTHENTICATED',
-      description: 'Flag controlling if auth header for L1 Testnet will be injected to requests.',
-      defaultValue: params.NEXT_PUBLIC_L1_TESTNET_RPC_IS_AUTHENTICATED ?: true,
+    string(
+      name: 'NEXT_PUBLIC_L1_TESTNET_RPC_AUTH_TYPE',
+      description: 'Auth type for L1 Testnet RPC (none, basic, pow).',
+      defaultValue: params.NEXT_PUBLIC_L1_TESTNET_RPC_AUTH_TYPE ?: 'basic',
     )
-    booleanParam(
-      name: 'NEXT_PUBLIC_L2_TESTNET_RPC_IS_AUTHENTICATED',
-      description: 'Flag controlling if auth header for L2 Testnet will be injected to requests.',
-      defaultValue: params.NEXT_PUBLIC_L2_TESTNET_RPC_IS_AUTHENTICATED ?: true,
+    string(
+      name: 'NEXT_PUBLIC_L2_TESTNET_RPC_AUTH_TYPE',
+      description: 'Auth type for L2 Testnet RPC (none, basic, pow).',
+      defaultValue: params.NEXT_PUBLIC_L2_TESTNET_RPC_AUTH_TYPE ?: 'basic',
     )
-    booleanParam(
-      name: 'NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED',
-      description: 'Flag controlling if auth header for L1 Devnet will be injected to requests.',
-      defaultValue: params.NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED ?: false,
+    string(
+      name: 'NEXT_PUBLIC_L1_DEVNET_RPC_AUTH_TYPE',
+      description: 'Auth type for L1 Devnet RPC (none, basic, pow).',
+      defaultValue: params.NEXT_PUBLIC_L1_DEVNET_RPC_AUTH_TYPE ?: 'none',
     )
-    booleanParam(
-      name: 'NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED',
-      description: 'Flag controlling if auth header for L2 Devnet will be injected to requests.',
-      defaultValue: params.NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED ?: false,
+    string(
+      name: 'NEXT_PUBLIC_L2_DEVNET_RPC_AUTH_TYPE',
+      description: 'Auth type for L2 Devnet RPC (none, basic, pow).',
+      defaultValue: params.NEXT_PUBLIC_L2_DEVNET_RPC_AUTH_TYPE ?: 'none',
     )
   }
 
@@ -145,12 +145,12 @@ pipeline {
                   --build-arg NEXT_PUBLIC_L2_DEVNET_RPC_URL='${env.NEXT_PUBLIC_L2_DEVNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L2_TESTNET_RPC_URL='${params.NEXT_PUBLIC_L2_TESTNET_RPC_URL}' \
                   --build-arg NEXT_PUBLIC_L2_MAINNET_RPC_URL='${params.NEXT_PUBLIC_L2_MAINNET_RPC_URL}' \
-                  --build-arg NEXT_PUBLIC_L1_MAINNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L1_MAINNET_RPC_IS_AUTHENTICATED}' \
-                  --build-arg NEXT_PUBLIC_L2_MAINNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L2_MAINNET_RPC_IS_AUTHENTICATED}' \
-                  --build-arg NEXT_PUBLIC_L1_TESTNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L1_TESTNET_RPC_IS_AUTHENTICATED}' \
-                  --build-arg NEXT_PUBLIC_L2_TESTNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L2_TESTNET_RPC_IS_AUTHENTICATED}' \
-                  --build-arg NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L1_DEVNET_RPC_IS_AUTHENTICATED}' \
-                  --build-arg NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED='${params.NEXT_PUBLIC_L2_DEVNET_RPC_IS_AUTHENTICATED}' \
+                  --build-arg NEXT_PUBLIC_L1_MAINNET_RPC_AUTH_TYPE='${params.NEXT_PUBLIC_L1_MAINNET_RPC_AUTH_TYPE}' \
+                  --build-arg NEXT_PUBLIC_L2_MAINNET_RPC_AUTH_TYPE='${params.NEXT_PUBLIC_L2_MAINNET_RPC_AUTH_TYPE}' \
+                  --build-arg NEXT_PUBLIC_L1_TESTNET_RPC_AUTH_TYPE='${params.NEXT_PUBLIC_L1_TESTNET_RPC_AUTH_TYPE}' \
+                  --build-arg NEXT_PUBLIC_L2_TESTNET_RPC_AUTH_TYPE='${params.NEXT_PUBLIC_L2_TESTNET_RPC_AUTH_TYPE}' \
+                  --build-arg NEXT_PUBLIC_L1_DEVNET_RPC_AUTH_TYPE='${params.NEXT_PUBLIC_L1_DEVNET_RPC_AUTH_TYPE}' \
+                  --build-arg NEXT_PUBLIC_L2_DEVNET_RPC_AUTH_TYPE='${params.NEXT_PUBLIC_L2_DEVNET_RPC_AUTH_TYPE}' \
                   --build-arg NEXT_PUBLIC_ETH_RPC_PROXY_USER='${env.NEXT_PUBLIC_ETH_RPC_PROXY_USER}' \
                   --build-arg NEXT_PUBLIC_ETH_RPC_PROXY_PASS='${env.NEXT_PUBLIC_ETH_RPC_PROXY_PASS}' \
               ."""

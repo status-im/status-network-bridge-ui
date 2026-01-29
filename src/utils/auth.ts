@@ -6,7 +6,3 @@ export const generateRPCBasicAuthToken = () => {
   return Buffer.from(data).toString('base64');
 }
 
-// Auth mode check
-export const isPuzzleAuthEnabled = () =>
-  process.env.NEXT_PUBLIC_USE_PUZZLE_AUTH === 'true';
-

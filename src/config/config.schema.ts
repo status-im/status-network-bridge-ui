@@ -9,7 +9,7 @@ const generateNetworkConfigSchema = (disableRPCRequired?: boolean) => {
     tokenBridgeAddress: Joi.string().required(),
     usdcBridgeAddress: Joi.string().required(),
     defaultRPC: disableRPCRequired ? Joi.string() : Joi.string().required(),
-    isAuthenticatedRPC: Joi.boolean()
+    authType: Joi.string().valid("none", "basic", "pow").default("none")
   })
 }
 
