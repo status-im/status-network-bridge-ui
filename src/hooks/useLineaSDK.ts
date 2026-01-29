@@ -6,14 +6,12 @@ import { useChainStore } from "@/stores/chainStore";
 import { FetchRequest, FetchResponse, JsonRpcProvider } from "ethers";
 import { generateRPCBasicAuthToken } from "@/utils/auth";
 import { getChainAuthType } from "@/utils/chainsUtil";
-import { PuzzleAuthService } from "@/services/puzzleAuth";
+import { PuzzleAuthService, RETRY_STATUS_CODES } from "@/services/puzzleAuth";
 
 interface LineaSDKContracts {
   L1: L1MessageServiceContract;
   L2: L2MessageServiceContract;
 }
-
-const RETRY_STATUS_CODES = new Set([401, 403, 429]);
 
 const createPuzzleAuthProvider = (rpcUrl: string): JsonRpcProvider => {
   const origin = new URL(rpcUrl).origin;

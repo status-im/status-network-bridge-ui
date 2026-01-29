@@ -6,15 +6,13 @@ import { Transport } from "viem";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { getChainAuthType } from "@/utils/chainsUtil";
 import { generateRPCBasicAuthToken } from "@/utils/auth";
-import { PuzzleAuthService } from "@/services/puzzleAuth";
+import { PuzzleAuthService, RETRY_STATUS_CODES } from "@/services/puzzleAuth";
 
 if (!config.walletConnectId) throw new Error("Project ID is not defined");
 
 const basicHeaders = (): Record<string, string> => ({
   Authorization: `Basic ${generateRPCBasicAuthToken()}`
 });
-
-const RETRY_STATUS_CODES = new Set([401, 403, 429]);
 
 const puzzleHooks = (rpcUrl: string) => {
   const origin = new URL(rpcUrl).origin;

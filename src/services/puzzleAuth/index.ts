@@ -19,3 +19,4 @@ export type {
   Argon2Params,
 } from "./types";
 export { solvePuzzle } from "./solver";
+export { RETRY_STATUS_CODES } from "./constants";
