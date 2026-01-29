@@ -18,4 +18,4 @@ export type {
   PuzzleAuthError,
   Argon2Params,
 } from "./types";
-export { solvePuzzle, checkDifficulty, hexToUint8Array } from "./solver";
+export { solvePuzzle } from "./solver";

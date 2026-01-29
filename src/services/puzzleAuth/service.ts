@@ -146,31 +146,6 @@ class PuzzleAuthService {
   }
 
   /**
-   * Make an authenticated fetch request to this origin
-   * Automatically includes the auth token in headers
-   */
-  public async fetch(
-    path: string,
-    init?: RequestInit,
-    onProgress?: ProgressCallback,
-    onStatus?: StatusCallback,
-  ): Promise<Response> {
-    const token = await this.ensureToken(onProgress, onStatus);
-
-    const url = path.startsWith("/") ? `${this.origin}${path}` : `${this.origin}/${path}`;
-
-    const headers = new Headers(init?.headers);
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
-    }
-
-    return fetch(url, {
-      ...init,
-      headers,
-    });
-  }
-
-  /**
    * Check if token data is valid (not expired)
    */
   private isValid(tokenData: TokenData | null): boolean {

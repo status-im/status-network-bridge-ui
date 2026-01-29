@@ -11,7 +11,7 @@ import type { Puzzle, Solution, PuzzleAuthResult, ProgressCallback } from "./typ
 /**
  * Convert hex string to Uint8Array
  */
-export const hexToUint8Array = (hex: string): Uint8Array => {
+const hexToUint8Array = (hex: string): Uint8Array => {
   const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
     bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
@@ -22,7 +22,7 @@ export const hexToUint8Array = (hex: string): Uint8Array => {
 /**
  * Check if hash meets difficulty requirement (leading zeros)
  */
-export const checkDifficulty = (hash: string, difficulty: number): boolean => {
+const checkDifficulty = (hash: string, difficulty: number): boolean => {
   if (hash.length < difficulty) return false;
   for (let i = 0; i < difficulty; i++) {
     if (hash[i] !== "0") return false;
