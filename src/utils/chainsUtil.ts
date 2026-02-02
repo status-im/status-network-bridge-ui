@@ -1,4 +1,4 @@
-import {config, NetworkLayer, NetworkType} from "@/config";
+import {config, NetworkLayer, NetworkType, AuthType} from "@/config";
 import {Chain} from "viem/chains";
 import {CHAIN_ID_TO_ICON_PATH, CHAIN_ID_TO_SUPPORTED_NETWORK, ESupportedNetworks} from "@/utils/constants";
 
@@ -45,15 +45,15 @@ export const getChainNetworkTypeByChainId = (chainId: number) => {
   }
 }
 
-export const isChainRPCAuthenticated = (chainId: number) => {
+export const getChainAuthType = (chainId: number): AuthType => {
   const networkType = getChainNetworkTypeByChainId(chainId)
   const networkLayer = getChainNetworkLayerByChainId(chainId)
 
   if (!networkType || !networkLayer) {
-    return false;
+    return AuthType.NONE;
   }
 
-  return config.networks[networkType][networkLayer].isAuthenticatedRPC;
+  return config.networks[networkType][networkLayer].authType;
 }
 
 export const getChainLogoPath = (chainId: number) => {

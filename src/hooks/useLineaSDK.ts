@@ -1,16 +1,46 @@
-import {useMemo} from "react";
-import {LineaSDK} from "@consensys/linea-sdk";
-import {L1MessageServiceContract, L2MessageServiceContract} from "@consensys/linea-sdk/dist/lib/contracts";
-import {config, NetworkType} from "@/config";
-import {useChainStore} from "@/stores/chainStore";
-import {FetchRequest, JsonRpcProvider} from "ethers";
-import {generateRPCBasicAuthToken} from "@/utils/auth";
-import {isChainRPCAuthenticated} from "@/utils/chainsUtil";
+import { useMemo } from "react";
+import { LineaSDK } from "@consensys/linea-sdk";
+import { L1MessageServiceContract, L2MessageServiceContract } from "@consensys/linea-sdk/dist/lib/contracts";
+import { config, NetworkType, AuthType } from "@/config";
+import { useChainStore } from "@/stores/chainStore";
+import { FetchRequest, FetchResponse, JsonRpcProvider } from "ethers";
+import { generateRPCBasicAuthToken } from "@/utils/auth";
+import { getChainAuthType } from "@/utils/chainsUtil";
+import { PuzzleAuthService, RETRY_STATUS_CODES } from "@/services/puzzleAuth";
 
 interface LineaSDKContracts {
   L1: L1MessageServiceContract;
   L2: L2MessageServiceContract;
 }
+
+const createPuzzleAuthProvider = (rpcUrl: string): JsonRpcProvider => {
+  const origin = new URL(rpcUrl).origin;
+  const service = PuzzleAuthService.forOrigin(origin);
+  const fetchRequest = new FetchRequest(rpcUrl);
+
+  fetchRequest.preflightFunc = async (req: FetchRequest) => {
+    const token = service.getToken() ?? (await service.ensureToken());
+    if (token) {
+      req.setHeader("Authorization", `Bearer ${token}`);
+    }
+    return req;
+  };
+
+  fetchRequest.processFunc = async (_req: FetchRequest, resp: FetchResponse) => {
+    if (RETRY_STATUS_CODES.has(resp.statusCode)) {
+      service.invalidateToken();
+    }
+    return resp;
+  };
+
+  return new JsonRpcProvider(fetchRequest);
+};
+
+const createBasicAuthProvider = (rpcUrl: string): JsonRpcProvider => {
+  const fetchRequest = new FetchRequest(rpcUrl);
+  fetchRequest.setHeader("Authorization", `Basic ${generateRPCBasicAuthToken()}`);
+  return new JsonRpcProvider(fetchRequest);
+};
 
 const useLineaSDK = () => {
   const networkType = useChainStore((state) => state.networkType);
@@ -30,21 +60,19 @@ const useLineaSDK = () => {
       l1RpcUrl = config.networks[networkType].L1.defaultRPC;
       l2RpcUrl = config.networks[networkType].L2.defaultRPC;
 
-      const isL1Authenticated = isChainRPCAuthenticated(config.networks[networkType].L1.chainId);
-      const isL2Authenticated = isChainRPCAuthenticated(config.networks[networkType].L2.chainId);
-      if (isL1Authenticated || isL2Authenticated) {
-        const authToken = generateRPCBasicAuthToken();
+      const l1AuthType = getChainAuthType(config.networks[networkType].L1.chainId);
+      const l2AuthType = getChainAuthType(config.networks[networkType].L2.chainId);
 
-        if (isL1Authenticated) {
-          const l1RpcFetchRequest = new FetchRequest(l1RpcUrl);
-          l1RpcFetchRequest.setHeader("Authorization", `Basic ${authToken}`);
-          l1Rpc = new JsonRpcProvider(l1RpcFetchRequest)
-        }
-        if (isL2Authenticated) {
-          const l2RpcFetchRequest = new FetchRequest(l2RpcUrl);
-          l2RpcFetchRequest.setHeader("Authorization", `Basic ${authToken}`);
-          l2Rpc = new JsonRpcProvider(l2RpcFetchRequest)
-        }
+      if (l1AuthType === AuthType.POW) {
+        l1Rpc = createPuzzleAuthProvider(l1RpcUrl);
+      } else if (l1AuthType === AuthType.BASIC) {
+        l1Rpc = createBasicAuthProvider(l1RpcUrl);
+      }
+
+      if (l2AuthType === AuthType.POW) {
+        l2Rpc = createPuzzleAuthProvider(l2RpcUrl);
+      } else if (l2AuthType === AuthType.BASIC) {
+        l2Rpc = createBasicAuthProvider(l2RpcUrl);
       }
     } else {
       return { lineaSDK: null, lineaSDKContracts: null };
