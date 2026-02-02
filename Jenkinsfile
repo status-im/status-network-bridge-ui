@@ -54,35 +54,35 @@ pipeline {
       description: 'L2 Mainnet RPC URL.',
       defaultValue: params.NEXT_PUBLIC_L2_MAINNET_RPC_URL ?: 'https://snt.eth-rpc.status.im/status/mainnet',
     )
-    choice(
+    string(
       name: 'NEXT_PUBLIC_L1_MAINNET_RPC_AUTH_TYPE',
       description: 'Auth type for L1 Mainnet RPC.',
-      choices: ['none', 'basic', 'pow']
+      defaultValue: params.NEXT_PUBLIC_L1_MAINNET_RPC_AUTH_TYPE ?: 'none',
     )
-    choice(
+    string(
       name: 'NEXT_PUBLIC_L2_MAINNET_RPC_AUTH_TYPE',
       description: 'Auth type for L2 Mainnet RPC.',
-      choices: ['none', 'basic', 'pow']
+      defaultValue: params.NEXT_PUBLIC_L2_MAINNET_RPC_AUTH_TYPE ?: 'none',
     )
-    choice(
+    string(
       name: 'NEXT_PUBLIC_L1_TESTNET_RPC_AUTH_TYPE',
       description: 'Auth type for L1 Testnet RPC.',
-      choices: ['none', 'basic', 'pow']
+      defaultValue: params.NEXT_PUBLIC_L1_TESTNET_RPC_AUTH_TYPE ?: 'none',
     )
-    choice(
+    string(
       name: 'NEXT_PUBLIC_L2_TESTNET_RPC_AUTH_TYPE',
       description: 'Auth type for L2 Testnet RPC.',
-      choices: ['none', 'basic', 'pow']
+      defaultValue: params.NEXT_PUBLIC_L2_TESTNET_RPC_AUTH_TYPE ?: 'none',
     )
-    choice(
+    string(
       name: 'NEXT_PUBLIC_L1_DEVNET_RPC_AUTH_TYPE',
       description: 'Auth type for L1 Devnet RPC.',
-      choices: ['none', 'basic', 'pow']
+      defaultValue: params.NEXT_PUBLIC_L1_DEVNET_RPC_AUTH_TYPE ?: 'none',
     )
-    choice(
+    string(
       name: 'NEXT_PUBLIC_L2_DEVNET_RPC_AUTH_TYPE',
       description: 'Auth type for L2 Devnet RPC.',
-      choices: ['none', 'basic', 'pow']
+      defaultValue: params.NEXT_PUBLIC_L2_DEVNET_RPC_AUTH_TYPE ?: 'none',
     )
   }
 
