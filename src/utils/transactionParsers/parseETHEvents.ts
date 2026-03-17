@@ -17,7 +17,7 @@ const parseETHEvents = async (
 ) => {
   if (
     networkType !== NetworkType.MAINNET &&
-    networkType !== NetworkType.SEPOLIA &&
+    networkType !== NetworkType.HOODI &&
     networkType !== NetworkType.DEVNET &&
     networkType !== NetworkType.UNKNOWN
   ) {

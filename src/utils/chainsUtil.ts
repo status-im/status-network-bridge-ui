@@ -11,12 +11,12 @@ export const getChainNetworkLayerByChainId = (chainId: number) => {
 
   switch (supportedChain) {
     case ESupportedNetworks.DEV_L2:
-    case ESupportedNetworks.STATUS_SEPOLIA:
+    case ESupportedNetworks.STATUS_HOODI:
     case ESupportedNetworks.STATUS_MAINNET:
       return NetworkLayer.L2;
     case ESupportedNetworks.DEV_L1:
     case ESupportedNetworks.ETH_MAINNET:
-    case ESupportedNetworks.ETH_SEPOLIA:
+    case ESupportedNetworks.ETH_HOODI:
       return NetworkLayer.L1;
     default:
       return undefined;
@@ -34,9 +34,9 @@ export const getChainNetworkTypeByChainId = (chainId: number) => {
     case ESupportedNetworks.DEV_L1:
     case ESupportedNetworks.DEV_L2:
       return NetworkType.DEVNET;
-    case ESupportedNetworks.ETH_SEPOLIA:
-    case ESupportedNetworks.STATUS_SEPOLIA:
-      return NetworkType.SEPOLIA;
+    case ESupportedNetworks.ETH_HOODI:
+    case ESupportedNetworks.STATUS_HOODI:
+      return NetworkType.HOODI;
     case ESupportedNetworks.STATUS_MAINNET:
     case ESupportedNetworks.ETH_MAINNET:
       return NetworkType.MAINNET;

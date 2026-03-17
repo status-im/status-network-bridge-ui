@@ -1,11 +1,11 @@
 import log from "loglevel";
 import { Address } from "viem";
 import { GetTokenReturnType, getToken } from "@wagmi/core";
-import { sepolia, mainnet, Chain } from "viem/chains";
+import { hoodi, mainnet, Chain } from "viem/chains";
 import { NetworkTokens, NetworkType, TokenInfo, TokenType, wagmiConfig } from "@/config";
 import { Token } from "@/models/token";
 import { defaultTokensConfig } from "@/stores/tokenStore";
-import {statusSepolia} from "@wagmi/core/chains";
+import {statusHoodi} from "@/config/wagmiChains";
 
 interface CoinGeckoToken {
   id: string;
@@ -21,7 +21,7 @@ interface CoinGeckoTokenDetail {
 
 enum NetworkTypes {
   MAINNET = "MAINNET",
-  SEPOLIA = "SEPOLIA",
+  HOODI = "HOODI",
 }
 
 export const CANONICAL_BRIDGED_TYPE = "canonical-bridge";
@@ -83,7 +83,7 @@ export async function fetchTokenInfo(
   let chainFound;
 
   if (!chainFound) {
-    const chains: Chain[] = networkType === NetworkType.SEPOLIA ? [statusSepolia, sepolia] : [];
+    const chains: Chain[] = networkType === NetworkType.HOODI ? [statusHoodi, hoodi] : [];
 
     // Put the fromChain arg at the begining to take it as priority
     if (fromChain) chains.unshift(fromChain);
@@ -109,7 +109,7 @@ export async function fetchTokenInfo(
     return;
   }
 
-  const L1Token = chainFound.id === mainnet.id || chainFound.id === sepolia.id;
+  const L1Token = chainFound.id === mainnet.id || chainFound.id === hoodi.id;
 
   // Fetch image
   const name = erc20.name;
@@ -137,8 +137,8 @@ export async function getTokens(networkTypes: NetworkTypes): Promise<Token[]> {
   try {
     // Fetch the JSON data from the URL.
     let url = process.env.NEXT_PUBLIC_MAINNET_TOKEN_LIST ? (process.env.NEXT_PUBLIC_MAINNET_TOKEN_LIST as string) : "";
-    if (networkTypes === NetworkTypes.SEPOLIA) {
-      url = process.env.NEXT_PUBLIC_SEPOLIA_TOKEN_LIST ? (process.env.NEXT_PUBLIC_SEPOLIA_TOKEN_LIST as string) : "";
+    if (networkTypes === NetworkTypes.HOODI) {
+      url = process.env.NEXT_PUBLIC_HOODI_TOKEN_LIST ? (process.env.NEXT_PUBLIC_HOODI_TOKEN_LIST as string) : "";
     }
 
     if (!url) {
@@ -206,9 +206,9 @@ export async function formatToken(token: Token): Promise<TokenInfo> {
 }
 
 export async function getTokenConfig(): Promise<NetworkTokens> {
-  const [mainnetTokens, sepoliaTokens] = await Promise.all([
+  const [mainnetTokens, hoodiTokens] = await Promise.all([
     getTokens(NetworkTypes.MAINNET),
-    getTokens(NetworkTypes.SEPOLIA),
+    getTokens(NetworkTypes.HOODI),
   ]);
 
   const updatedTokensConfig = { ...defaultTokensConfig };
@@ -218,9 +218,9 @@ export async function getTokenConfig(): Promise<NetworkTokens> {
     ...(await Promise.all(mainnetTokens.map(async (token: Token): Promise<TokenInfo> => formatToken(token)))),
   ];
 
-  updatedTokensConfig.SEPOLIA = [
-    ...defaultTokensConfig.SEPOLIA,
-    ...(await Promise.all(sepoliaTokens.map((token: Token): Promise<TokenInfo> => formatToken(token)))),
+  updatedTokensConfig.HOODI = [
+    ...defaultTokensConfig.HOODI,
+    ...(await Promise.all(hoodiTokens.map((token: Token): Promise<TokenInfo> => formatToken(token)))),
   ];
 
   return updatedTokensConfig;

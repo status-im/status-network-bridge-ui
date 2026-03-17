@@ -1,10 +1,28 @@
-import { sepolia, statusSepolia } from "@wagmi/core/chains";
+import { hoodi, statusSepolia } from "@wagmi/core/chains";
 import { defineChain } from "viem";
 import { AppKitNetwork } from "@reown/appkit/networks";
 import {ESupportedNetworks, SUPPORTED_NETWORK_TO_CHAIN_ID} from "@/utils/constants";
 
+export const statusHoodi = { // @TODO temporary, replace with proper wagmi import
+  ...statusSepolia,
+  id: 374,
+  name: "Status Network Hoodi",
+  rpcUrls: {
+    default: {
+      http: [process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL]
+    }
+  },
+  blockExplorers: {
+    default: {
+      name: 'Blockscout',
+      url: 'https://hoodiscan.status.network/'
+    }
+  },
+  contracts: {}
+}
+
 const devL1 = defineChain({
-    id: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L1],
+  id: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L1],
   name: "Dev L1",
   nativeCurrency: {
     name: "Devnet Ether",
@@ -29,7 +47,7 @@ const devL1 = defineChain({
 })
 
 const devL2 = defineChain({
-  ...statusSepolia,
+  ...statusHoodi,
   id: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L2],
   name: "Dev L2",
   nativeCurrency: {
@@ -55,7 +73,7 @@ const devL2 = defineChain({
 })
 
 const devnetChains = [devL1, devL2];
-const productionChains = [sepolia, statusSepolia];
+const productionChains = [hoodi, statusHoodi];
 
 // @ts-ignore
 export const chains: [AppKitNetwork, ...AppKitNetwork[]] = process.env.NEXT_PUBLIC_USE_DEVNET === "true" ? devnetChains : productionChains;

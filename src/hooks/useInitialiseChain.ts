@@ -67,11 +67,11 @@ const useInitialiseChain = () => {
         if (process.env.NEXT_PUBLIC_USE_DEVNET === "true") {
           networkType = NetworkType.DEVNET;
           setNetworkType(networkType);
-          !token && setToken(defaultTokensConfig.SEPOLIA[0]);
+          !token && setToken(defaultTokensConfig.HOODI[0]);
         } else if (account?.chain?.testnet === true) {
-          networkType = NetworkType.SEPOLIA;
+          networkType = NetworkType.HOODI;
           setNetworkType(networkType);
-          !token && setToken(defaultTokensConfig.SEPOLIA[0]);
+          !token && setToken(defaultTokensConfig.HOODI[0]);
         } else if (account?.chain) {
           networkType = NetworkType.MAINNET;
           setNetworkType(networkType);
@@ -131,7 +131,7 @@ const useInitialiseChain = () => {
 
   useEffect(() => {
     // Reset token if network type changes
-    if (networkType === NetworkType.MAINNET || networkType === NetworkType.SEPOLIA) {
+    if (networkType === NetworkType.MAINNET || networkType === NetworkType.HOODI) {
       setToken(defaultTokensConfig[networkType][0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

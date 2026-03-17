@@ -1,6 +1,5 @@
 import { switchChain } from "@wagmi/core";
 import Image from "next/image";
-import { linea, lineaSepolia, mainnet, sepolia } from "viem/chains";
 import { wagmiConfig } from "@/config";
 import { Button } from "../ui";
 import {availableChainIds, availableNetworks, CHAIN_ID_TO_ICON_PATH, CHAIN_ID_TO_NAME} from "@/utils/constants";

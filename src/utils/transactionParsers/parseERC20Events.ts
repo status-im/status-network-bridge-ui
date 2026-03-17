@@ -16,7 +16,7 @@ const parseERC20Events = async (
 ) => {
   if (
     networkType !== NetworkType.MAINNET &&
-    networkType !== NetworkType.SEPOLIA &&
+    networkType !== NetworkType.HOODI &&
     networkType !== NetworkType.DEVNET &&
     networkType !== NetworkType.UNKNOWN
   ) {
@@ -85,7 +85,7 @@ const parseERC20V2Events = async (
 ) => {
   if (
     networkType !== NetworkType.MAINNET &&
-    networkType !== NetworkType.SEPOLIA &&
+    networkType !== NetworkType.HOODI &&
     networkType !== NetworkType.DEVNET &&
     networkType !== NetworkType.UNKNOWN
   ) {

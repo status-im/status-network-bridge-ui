@@ -64,7 +64,7 @@ export function Chains() {
           />
 
           <span className="hidden font-normal md:block">
-            {chain?.name ? (chain.name === "Linea Sepolia Testnet" ? "Linea Sepolia" : chain.name) : ""}
+            {chain?.name ? chain.name : ""}
           </span>
         </summary>
         <ul className="menu dropdown-content absolute right-0 z-10 mt-2 min-w-max border-2 bg-cardBg p-0 shadow">

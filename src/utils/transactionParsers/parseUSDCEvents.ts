@@ -15,7 +15,7 @@ const parseUSDCEvents = async (
 ) => {
   if (
     networkType !== NetworkType.MAINNET &&
-    networkType !== NetworkType.SEPOLIA &&
+    networkType !== NetworkType.HOODI &&
     networkType !== NetworkType.UNKNOWN
   ) {
     throw new Error("Invalid network type");
