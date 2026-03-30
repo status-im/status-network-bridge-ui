@@ -50,7 +50,7 @@ export default function FromChainDropdown() {
             />
           )}
           <span className="hidden md:block">
-            {fromChain?.name === "Linea Sepolia Testnet" ? "Linea Sepolia" : fromChain?.name}
+            {fromChain?.name}
           </span>
           <svg
             className="size-4 text-card transition-transform"
@@ -64,7 +64,7 @@ export default function FromChainDropdown() {
         </summary>
         <ul className="menu dropdown-content absolute right-0 z-10 mt-2 min-w-max bg-backgroundColor p-0 shadow">
           <DropdownItem
-            title={toChain?.name ? (toChain?.name === "Linea Sepolia Testnet" ? "Linea Sepolia" : toChain?.name) : ""}
+            title={toChain?.name ? toChain?.name : ""}
             iconPath={toChain && getChainLogoPath(toChain.id)}
             onClick={switchNetworkHandler}
           />

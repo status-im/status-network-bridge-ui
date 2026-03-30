@@ -18,7 +18,8 @@ export function ClaimingType() {
 
   const selectedClaimType = watch("claim");
 
-  const isAutoDisabled = networkLayer === NetworkLayer.L2 || token?.type !== TokenType.ETH || !isConnected;
+  const isAutoDisabled = networkLayer === NetworkLayer.L2 || !isConnected;
+  const isManualDisabled = networkLayer === NetworkLayer.L1 || !isConnected;
 
   useEffect(() => {
     if (networkLayer === NetworkLayer.L2 || token?.type !== TokenType.ETH) {
@@ -71,7 +72,7 @@ export function ClaimingType() {
         value="manual"
         label="Manual Claim (Advanced)"
         tooltip="You will need to claim your transaction on the destination chain with an additional transaction that requires ETH on the destination chain"
-        disabled={!isConnected}
+        disabled={isManualDisabled}
         isConnected={isConnected}
         onClick={handleManualClaimClick}
         isSelected={selectedClaimType === "manual"}

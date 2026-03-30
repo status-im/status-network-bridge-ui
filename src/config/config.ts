@@ -5,7 +5,7 @@ import {ESupportedNetworks, SUPPORTED_NETWORK_TO_CHAIN_ID} from "@/utils/constan
 export enum NetworkType {
   UNKNOWN = "UNKNOWN",
   MAINNET = "MAINNET",
-  SEPOLIA = "SEPOLIA",
+  HOODI = "HOODI",
   DEVNET = "DEVNET",
   WRONG_NETWORK = "WRONG_NETWORK",
 }
@@ -61,7 +61,7 @@ interface NetworkConfig {
 
 interface Networks {
   MAINNET: NetworkConfig;
-  SEPOLIA: NetworkConfig;
+  HOODI: NetworkConfig;
   [key: string]: NetworkConfig; // For potential additional networks
 }
 
@@ -76,7 +76,7 @@ export interface Storage {
 
 export type NetworkTokens = {
   MAINNET: TokenInfo[];
-  SEPOLIA: TokenInfo[];
+  HOODI: TokenInfo[];
   DEVNET: TokenInfo[];
   UNKNOWN: TokenInfo[];
 };
@@ -139,55 +139,55 @@ export const config: Config = {
         ? BigInt(process.env.NEXT_PUBLIC_MAINNET_PROFIT_MARGIN)
         : BigInt(1),
     },
-    SEPOLIA: {
+    HOODI: {
       L1: {
-        name: "Sepolia",
+        name: "Hoodi",
         iconPath: "/images/logo/ethereum-rounded.svg",
-        chainId: 11155111,
-        messageServiceAddress: process.env.NEXT_PUBLIC_SEPOLIA_L1_MESSAGE_SERVICE
-          ? (process.env.NEXT_PUBLIC_SEPOLIA_L1_MESSAGE_SERVICE as Address)
+        chainId: 560048,
+        messageServiceAddress: process.env.NEXT_PUBLIC_HOODI_L1_MESSAGE_SERVICE
+          ? (process.env.NEXT_PUBLIC_HOODI_L1_MESSAGE_SERVICE as Address)
           : ({} as Address),
-        tokenBridgeAddress: process.env.NEXT_PUBLIC_SEPOLIA_L1_TOKEN_BRIDGE
-          ? (process.env.NEXT_PUBLIC_SEPOLIA_L1_TOKEN_BRIDGE as Address)
+        tokenBridgeAddress: process.env.NEXT_PUBLIC_HOODI_L1_TOKEN_BRIDGE
+          ? (process.env.NEXT_PUBLIC_HOODI_L1_TOKEN_BRIDGE as Address)
           : ({} as Address),
-        usdcBridgeAddress: process.env.NEXT_PUBLIC_SEPOLIA_L1_USDC_BRIDGE
-          ? (process.env.NEXT_PUBLIC_SEPOLIA_L1_USDC_BRIDGE as Address)
+        usdcBridgeAddress: process.env.NEXT_PUBLIC_HOODI_L1_USDC_BRIDGE
+          ? (process.env.NEXT_PUBLIC_HOODI_L1_USDC_BRIDGE as Address)
           : ({} as Address),
         defaultRPC: process.env.NEXT_PUBLIC_L1_TESTNET_RPC_URL,
         authType: (process.env.NEXT_PUBLIC_L1_TESTNET_RPC_AUTH_TYPE as AuthType) || AuthType.NONE
       },
       L2: {
-        name: "Status Sepolia",
-        iconPath: "/images/logo/sn-sepolia.svg",
-        chainId: 1660990954,
-        messageServiceAddress: process.env.NEXT_PUBLIC_SEPOLIA_LINEA_MESSAGE_SERVICE
-          ? (process.env.NEXT_PUBLIC_SEPOLIA_LINEA_MESSAGE_SERVICE as Address)
+        name: "Status Hoodi",
+        iconPath: "/images/logo/sn-testnet.svg",
+        chainId: 374,
+        messageServiceAddress: process.env.NEXT_PUBLIC_HOODI_LINEA_MESSAGE_SERVICE
+          ? (process.env.NEXT_PUBLIC_HOODI_LINEA_MESSAGE_SERVICE as Address)
           : ({} as Address),
-        tokenBridgeAddress: process.env.NEXT_PUBLIC_SEPOLIA_LINEA_TOKEN_BRIDGE
-          ? (process.env.NEXT_PUBLIC_SEPOLIA_LINEA_TOKEN_BRIDGE as Address)
+        tokenBridgeAddress: process.env.NEXT_PUBLIC_HOODI_LINEA_TOKEN_BRIDGE
+          ? (process.env.NEXT_PUBLIC_HOODI_LINEA_TOKEN_BRIDGE as Address)
           : ({} as Address),
-        usdcBridgeAddress: process.env.NEXT_PUBLIC_SEPOLIA_LINEA_USDC_BRIDGE
-          ? (process.env.NEXT_PUBLIC_SEPOLIA_LINEA_USDC_BRIDGE as Address)
+        usdcBridgeAddress: process.env.NEXT_PUBLIC_HOODI_LINEA_USDC_BRIDGE
+          ? (process.env.NEXT_PUBLIC_HOODI_LINEA_USDC_BRIDGE as Address)
           : ({} as Address),
         defaultRPC: process.env.NEXT_PUBLIC_L2_TESTNET_RPC_URL,
         authType: (process.env.NEXT_PUBLIC_L2_TESTNET_RPC_AUTH_TYPE as AuthType) || AuthType.NONE
       },
-      gasEstimated: process.env.NEXT_PUBLIC_SEPOLIA_GAS_ESTIMATED
-        ? BigInt(process.env.NEXT_PUBLIC_SEPOLIA_GAS_ESTIMATED)
+      gasEstimated: process.env.NEXT_PUBLIC_HOODI_GAS_ESTIMATED
+        ? BigInt(process.env.NEXT_PUBLIC_HOODI_GAS_ESTIMATED)
         : BigInt(100000),
-      gasLimitSurplus: process.env.NEXT_PUBLIC_SEPOLIA_DEFAULT_GAS_LIMIT_SURPLUS
-        ? BigInt(process.env.NEXT_PUBLIC_SEPOLIA_DEFAULT_GAS_LIMIT_SURPLUS)
+      gasLimitSurplus: process.env.NEXT_PUBLIC_HOODI_DEFAULT_GAS_LIMIT_SURPLUS
+        ? BigInt(process.env.NEXT_PUBLIC_HOODI_DEFAULT_GAS_LIMIT_SURPLUS)
         : BigInt(6000),
-      profitMargin: process.env.NEXT_PUBLIC_SEPOLIA_PROFIT_MARGIN
-        ? BigInt(process.env.NEXT_PUBLIC_SEPOLIA_PROFIT_MARGIN)
+      profitMargin: process.env.NEXT_PUBLIC_HOODI_PROFIT_MARGIN
+        ? BigInt(process.env.NEXT_PUBLIC_HOODI_PROFIT_MARGIN)
         : BigInt(1),
     },
     DEVNET: {
       L1: {
-        name: "Sepolia Dev",
+        name: "L1 Dev",
         iconPath: "/images/logo/ethereum-rounded.svg",
         chainId: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L1],
-        messageServiceAddress: process.env.NEXT_PUBLIC_SEPOLIA_L1_MESSAGE_SERVICE
+        messageServiceAddress: process.env.NEXT_PUBLIC_HOODI_L1_MESSAGE_SERVICE
           ? (process.env.NEXT_PUBLIC_DEVNET_L1_MESSAGE_SERVICE as Address)
           : ({} as Address),
         tokenBridgeAddress: process.env.NEXT_PUBLIC_DEVNET_L1_TOKEN_BRIDGE
@@ -200,8 +200,8 @@ export const config: Config = {
         authType: (process.env.NEXT_PUBLIC_L1_DEVNET_RPC_AUTH_TYPE as AuthType) || AuthType.NONE,
       },
       L2: {
-        name: "Status Dev",
-        iconPath: "/images/logo/sn-sepolia.svg",
+        name: "L2 Dev",
+        iconPath: "/images/logo/sn-testnet.svg",
         chainId: SUPPORTED_NETWORK_TO_CHAIN_ID[ESupportedNetworks.DEV_L2],
         messageServiceAddress: process.env.NEXT_PUBLIC_DEVNET_LINEA_MESSAGE_SERVICE
           ? (process.env.NEXT_PUBLIC_DEVNET_LINEA_MESSAGE_SERVICE as Address)

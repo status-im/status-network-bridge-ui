@@ -1,9 +1,9 @@
-import { useMemo, useEffect, useState } from "react";
-import { formatEther, parseEther, parseUnits } from "viem";
-import { TokenType } from "@/config";
-import { useGasEstimation, useApprove, useMinimumFee, useExecutionFee } from "@/hooks";
-import { useChainStore } from "@/stores/chainStore";
-import { isMimeToken} from "@/utils/mime";
+import {useEffect, useMemo, useState} from "react";
+import {formatEther, parseEther, parseUnits} from "viem";
+import {NetworkLayer, TokenType} from "@/config";
+import {useApprove, useExecutionFee, useGasEstimation, useMinimumFee} from "@/hooks";
+import {useChainStore} from "@/stores/chainStore";
+import {isMimeToken} from "@/utils/mime";
 
 type UseReceivedAmountProps = {
   amount: string;
@@ -67,6 +67,10 @@ export function useReceivedAmount({ amount, enoughAllowance, claim }: UseReceive
 
     if (token.type !== TokenType.ETH) {
       return amount;
+    }
+
+    if (networkLayer == NetworkLayer.L1 && token.type == TokenType.ETH) {
+      return amount; // We don't charge fees on deposits because claiming is subsidized
     }
 
     const amountInWei = parseEther(amount);

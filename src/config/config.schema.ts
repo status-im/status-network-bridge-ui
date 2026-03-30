@@ -26,7 +26,7 @@ export const configSchema = Joi.object({
       gasLimitSurplus: Joi.required(),
       profitMargin: Joi.required(),
     }),
-    SEPOLIA: Joi.object({
+    HOODI: Joi.object({
       L1: generateNetworkConfigSchema(),
       L2: generateNetworkConfigSchema(),
       gasEstimated: Joi.required(),

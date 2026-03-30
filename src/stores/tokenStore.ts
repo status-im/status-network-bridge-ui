@@ -18,7 +18,7 @@ export const defaultTokensConfig: NetworkTokens = {
       isDefault: true,
     },
   ],
-  SEPOLIA: [
+  HOODI: [
     {
       name: "Ether",
       symbol: "ETH",

@@ -35,12 +35,12 @@ pipeline {
     string(
       name: 'NEXT_PUBLIC_L1_TESTNET_RPC_URL',
       description: 'L1 Testnet RPC URL.',
-      defaultValue: params.NEXT_PUBLIC_L1_TESTNET_RPC_URL ?: 'https://snt.eth-rpc.status.im/ethereum/sepolia',
+      defaultValue: params.NEXT_PUBLIC_L1_TESTNET_RPC_URL ?: 'https://snt.eth-rpc.status.im/ethereum/hoodi',
     )
     string(
       name: 'NEXT_PUBLIC_L2_TESTNET_RPC_URL',
       description: 'L2 Testnet RPC URL.',
-      defaultValue: params.NEXT_PUBLIC_L2_TESTNET_RPC_URL ?: 'https://snt.eth-rpc.status.im/status/sepolia',
+      defaultValue: params.NEXT_PUBLIC_L2_TESTNET_RPC_URL ?: 'https://snt.eth-rpc.status.im/status/hoodi',
     )
     /*Not used yet*/
     string(

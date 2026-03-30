@@ -51,7 +51,7 @@ export default function TokenModal({ setValue, clearErrors }: TokenModalProps) {
     async (query: string) => {
       let found = false;
 
-      if (networkType === NetworkType.SEPOLIA || networkType === NetworkType.MAINNET) {
+      if (networkType === NetworkType.HOODI || networkType === NetworkType.MAINNET) {
         const currentNetworkTokens = tokensList?.[networkType] || [];
 
         // Filter tokens based on the search query
@@ -117,7 +117,7 @@ export default function TokenModal({ setValue, clearErrors }: TokenModalProps) {
 
   useEffect(() => {
     if (debouncedSearchQuery.trim() === "") {
-      if (networkType === NetworkType.SEPOLIA || networkType === NetworkType.MAINNET) {
+      if (networkType === NetworkType.HOODI || networkType === NetworkType.MAINNET) {
         setFilteredTokens(tokensList[networkType]);
         setSearchTokenIsNew(false);
         return;

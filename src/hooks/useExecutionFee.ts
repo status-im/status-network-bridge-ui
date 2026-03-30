@@ -71,15 +71,19 @@ const calculateFee = ({
   const isManualClaim = claim === "manual";
   const isERC20orUSDC = token.type === TokenType.ERC20 || token.type === TokenType.USDC;
 
-  // postman fee
-  if (isETH && isL1 && isAutoClaim && gasPrice) {
-    return calculatePostmanFee(gasPrice, networkType);
-  }
-
-  // 0
-  if (isETH && isL1 && isManualClaim) {
+  if (isL1) { // Status Network subsidizes deposits
     return BigInt(0);
   }
+
+  // postman fee
+  // if (isETH && isL1 && isAutoClaim && gasPrice) {
+  //   return calculatePostmanFee(gasPrice, networkType);
+  // }
+
+  // 0
+  // if (isETH && isL1 && isManualClaim) {
+  //   return BigInt(0);
+  // }
 
   // anti-DDoS fee + postman fee
   if (isETH && isL2 && isAutoClaim && gasPrice) {
@@ -92,9 +96,9 @@ const calculateFee = ({
   }
 
   // 0
-  if (isERC20orUSDC && isL1) {
-    return BigInt(0);
-  }
+  // if (isERC20orUSDC && isL1) {
+  //   return BigInt(0);
+  // }
 
   // anti-DDoS fee
   if (isERC20orUSDC && isL2) {
