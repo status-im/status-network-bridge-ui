@@ -61,7 +61,7 @@ export function Fees({ totalReceived, fees: { total, bridgingFeeInWei, transacti
     setValue("minFees", bridgingFeeInWei);
   }, [bridgingFeeInWei, setValue]);
 
-  const estimatedTime = networkLayer === NetworkLayer.L1 ? "20 mins" : "8 hrs to 32 hrs";
+  const estimatedTime = networkLayer === NetworkLayer.L1 ? "20 mins" : "30 mins to 1 hr";
 
   return (
     <div className="flex flex-col gap-2 text-sm">
@@ -72,7 +72,7 @@ export function Fees({ totalReceived, fees: { total, bridgingFeeInWei, transacti
         tooltip={
           networkLayer === NetworkLayer.L1
             ? "Status Network has a 20 minutes delay on deposits as a security measure."
-            : "Status Network has a minimum 8 hour delay on withdrawals as a security measure. Withdrawals can take up to 32 hours to complete"
+            : "Status Network has a minimum 30 minute delay on withdrawals as a security measure. Withdrawals can take up to 1 hour to complete"
         }
       />
       <FeeLine
