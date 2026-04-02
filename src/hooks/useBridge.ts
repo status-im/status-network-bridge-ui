@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { writeContract, simulateContract } from "@wagmi/core";
 import { useAccount, useWaitForTransactionReceipt } from "wagmi";
-import { Address, parseUnits } from "viem";
+import {Address, parseUnits} from "viem";
 import log from "loglevel";
 import USDCBridge from "@/abis/USDCBridge.json";
 import TokenBridge from "@/abis/TokenBridge.json";
@@ -13,6 +13,7 @@ import { wagmiConfig } from "@/config";
 import { useChainStore } from "@/stores/chainStore";
 import useMinimumFee from "./useMinimumFee";
 import { isEmptyObject } from "@/utils/utils";
+import { prepareStatusNetworkTransaction } from "@/services/statusNetworkTransaction";
 
 type UseBridge = {
   hash: Address | undefined;
@@ -147,7 +148,8 @@ const useBridge = (): UseBridge => {
       try {
         const config = await getWriteConfig(amount, sendTo, userMinimumFee ?? minimumFee);
         if (config) {
-          const hash = await writeContract(wagmiConfig, config.request);
+          const preparedConfig = await prepareStatusNetworkTransaction(config);
+          const hash = await writeContract(wagmiConfig, preparedConfig.request);
           setTransaction({
             txHash: hash,
             chainId: fromChain?.id,

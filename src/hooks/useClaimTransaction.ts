@@ -10,6 +10,7 @@ import { TransactionHistory } from "@/models/history";
 import { getChainNetworkLayer, getChainNetworkType } from "@/utils/chainsUtil";
 import { useAccount } from "wagmi";
 import { Transaction } from "@/models";
+import { prepareStatusNetworkTransaction } from "@/services/statusNetworkTransaction";
 
 export interface MessageWithStatus {
   status: OnChainMessageStatus;
@@ -93,7 +94,8 @@ const useClaimTransaction = () => {
             });
           }
 
-          const hash = await writeContract(wagmiConfig, writeConfig.request);
+          const preparedConfig = await prepareStatusNetworkTransaction(writeConfig);
+          const hash = await writeContract(wagmiConfig, preparedConfig.request);
 
           setTransaction({
             txHash: hash,

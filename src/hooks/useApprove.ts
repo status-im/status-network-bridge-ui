@@ -7,6 +7,7 @@ import ERC20Abi from "@/abis/ERC20.json";
 import { wagmiConfig } from "@/config";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChainStore } from "@/stores/chainStore";
+import { prepareStatusNetworkTransaction } from "@/services/statusNetworkTransaction";
 
 const useApprove = () => {
   const [hash, setHash] = useState<Address | null>(null);
@@ -51,14 +52,15 @@ const useApprove = () => {
       }
 
       try {
-        const { request } = await simulateContract(wagmiConfig, {
+        const simulation = await simulateContract(wagmiConfig, {
           address: tokenAddress,
           abi: ERC20Abi,
           functionName: "approve",
           args: [spender, amount],
         });
 
-        const hash = await writeContract(wagmiConfig, request);
+        const preparedConfig = await prepareStatusNetworkTransaction(simulation);
+        const hash = await writeContract(wagmiConfig, preparedConfig.request);
         setHash(hash);
       } catch (error) {
         log.error(error);
